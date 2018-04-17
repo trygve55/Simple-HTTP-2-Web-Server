@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/trygve/Dokumenter/TDAT2004/Oving 3/web/build",
+  "command": "/usr/bin/c++     -std=c++1y -Wall -Wextra   -o CMakeFiles/Oving_3.dir/web.cpp.o -c \"/home/trygve/Dokumenter/TDAT2004/Oving 3/web/web.cpp\"",
+  "file": "/home/trygve/Dokumenter/TDAT2004/Oving 3/web/web.cpp"
+}
+]

@@ -1,0 +1,3 @@
+/home/trygve/Dokumenter/TDAT2004/Oving 3/web/build/CMakeFiles/rebuild_cache.dir
+/home/trygve/Dokumenter/TDAT2004/Oving 3/web/build/CMakeFiles/Oving_3.dir
+/home/trygve/Dokumenter/TDAT2004/Oving 3/web/build/CMakeFiles/edit_cache.dir
