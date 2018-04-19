@@ -8,15 +8,15 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string>
+#include <thread>
 
 class ServerLib
 {
 private:
   int port;
-  int server_fd, new_socket;
+  int server_fd;
   struct sockaddr_in address;
   int opt = 1;
-  char buffer[1024] = {0};
   int addrlen = sizeof(address);
   bool debugFlag = false;
   

@@ -44,24 +44,29 @@ int ServerLib::startServer() {
 }
 
 int ServerLib::handleRequest() {
-  if ((new_socket = accept(server_fd, (struct sockaddr *)&address, 
-                     (socklen_t*)&addrlen))<0)
-  {
-      perror("accept");
-      return -1;
-  }
+    int new_socket;
+    std::string res = defaultResponse;
+    
+    if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
+        perror("accept");
+        return -1;
+    }
+    
+    std::thread ([&new_socket, res]() {
+        char buffer[1024] = {0};
+        
+        std::cout << "connected" << std::endl;
+          
+        read(new_socket, buffer, 1024);
+        std::cout << std::string(buffer) << std::endl;
+        
+        write(new_socket, res.c_str(), res.size());
+        std::cout << "response sent"<< std::endl;
+        
+        close(new_socket);
+    }).detach();
   
-  if (debugFlag) std::cout << "connected" << std::endl;
-      
-  read(new_socket, buffer, 1024);
-  if (debugFlag) std::cout << std::string(buffer) << std::endl;
-  
-  write(new_socket, defaultResponse.c_str(), defaultResponse.size());
-  if (debugFlag) std::cout << "response sent"<< std::endl;
-  
-  close(new_socket);
-  
-  return 0;
+    return 0;
 }
 
 int ServerLib::setDefaultResponse(std::string response) {
