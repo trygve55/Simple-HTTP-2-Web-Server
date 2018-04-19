@@ -1,1 +1,0 @@
-/usr/bin/c++   -std=c++1y -Wall -Wextra  -rdynamic CMakeFiles/Oving_3.dir/web.cpp.o  -o Oving_3 
