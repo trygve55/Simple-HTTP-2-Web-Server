@@ -78,10 +78,16 @@ int ServerLib::handleRequest() {
     return 0;
 }
 
-int ServerLib::handleHTTP2Request(int new_socket, char buffer[1024]) {
+int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
+    
+    string upgradeHeader = "HTTP/1.1 101 Switching Protocols \r\n";
+    upgradeHeader.append("Connection: Upgrade\r\n");
+    upgradeHeader.append("Upgrade: h2c \r\n");
+    
+    write(socket, upgradeHeader.c_str(), upgradeHeader.length());
     
     std::cout << "Upgraded to HTTP2" << std::endl;
-    close(new_socket);
+    //close(new_socket);
     
     return 0;
 }
