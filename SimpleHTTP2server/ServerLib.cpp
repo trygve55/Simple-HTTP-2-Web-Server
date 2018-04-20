@@ -52,20 +52,35 @@ int ServerLib::handleRequest() {
         return -1;
     }
     
-    std::thread ([&new_socket, res]() {
+    std::thread ([this, &new_socket, res]() {
         char buffer[1024] = {0};
         
         std::cout << "connected" << std::endl;
           
         read(new_socket, buffer, 1024);
-        std::cout << std::string(buffer) << std::endl;
         
-        write(new_socket, res.c_str(), res.size());
-        std::cout << "response sent"<< std::endl;
+        int headerEnd = findHeaderEnd(buffer);
         
-        close(new_socket);
+        if (true) {
+            handleHTTP2Request(new_socket, buffer);
+        } else {
+            std::cout << std::string(buffer) << std::endl;
+            
+            write(new_socket, res.c_str(), res.size());
+            std::cout << "response sent"<< std::endl;
+            
+            close(new_socket);
+        }
     }).detach();
   
+    return 0;
+}
+
+int ServerLib::handleHTTP2Request(int new_socket, char buffer[1024]) {
+    
+    std::cout << "Upgraded to HTTP2" << std::endl;
+    close(new_socket);
+    
     return 0;
 }
 
@@ -77,4 +92,13 @@ int ServerLib::setDefaultResponse(std::string response) {
 
 void ServerLib::setDebug(bool debug) {
     debugFlag = debug;
+}
+
+int ServerLib::findHeaderEnd(char buffer[1024]) {
+    return 0;
+}
+
+int ServerLib::findStringInCharArray(std::string string, char buffer[1024]) {
+    
+    return 0;
 }

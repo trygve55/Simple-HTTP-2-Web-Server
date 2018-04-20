@@ -23,6 +23,9 @@ private:
   std::string defaultResponse;
   
   int handleRequest();
+  int handleHTTP2Request(int new_Socket, char buffer[1024]);
+  int findHeaderEnd(char buffer[1024]);
+  int ServerLib::findStringInCharArray(std::string string, char buffer[1024]) 
   
 public:
   ServerLib(int port);
