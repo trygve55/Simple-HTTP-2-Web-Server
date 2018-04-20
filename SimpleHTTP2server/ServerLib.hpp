@@ -9,6 +9,9 @@
 #include <vector>
 #include <thread>
 #include <functional>
+#include <chrono>
+#include <stdio.h>
+#include <string.h>
 
 //using namespace std;
 

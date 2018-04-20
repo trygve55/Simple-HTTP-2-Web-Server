@@ -87,6 +87,15 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
     write(socket, upgradeHeader.c_str(), upgradeHeader.length());
     
     std::cout << "Upgraded to HTTP2" << std::endl;
+    
+    while (true) {
+        memset(buffer, 0, sizeof(buffer));
+        if (read(socket, buffer, 1024)) {
+            std::cout << buffer << std::endl;
+        }
+        std::this_thread::sleep_for (std::chrono::seconds(1));
+    }
+    
     //close(new_socket);
     
     return 0;
