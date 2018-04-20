@@ -12,6 +12,8 @@ Header ParseHeader(char buffer[], size_t bufferSize) {
   int next = 0,iterator = headerString.find("\r\n");
   std::string headerline, content;
   
+  std::cout << inString << std::endl;
+  
   while(iterator < headerString.length()) {
     next = headerString.find(":", iterator);
     headerline = headerString.substr(iterator + 2, next - iterator - 2);
@@ -21,9 +23,9 @@ Header ParseHeader(char buffer[], size_t bufferSize) {
     iterator = next;
     
     headerObject.setHeaderline(headerline, content);
+    
+    //std::cout << "header: " << headerline << " content: " << content << std::endl;
   }
-  
-  std::cout << headerObject.getHeaderline("Host") << std::endl;
   
   return headerObject;
 }

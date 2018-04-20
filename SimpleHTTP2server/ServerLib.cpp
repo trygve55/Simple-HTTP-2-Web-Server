@@ -10,21 +10,16 @@ ServerLib::ServerLib(int port) : port(port) {
         
       read(socket, buffer, 1024);
       
-      ParseHeader(buffer, 1024);
+      Header header = ParseHeader(buffer, 1024);
       
-      //std::cout << findStringInCharArray("\r\n\r\n", buffer, 1024) << std::endl;
-      
-      if (false) {
+      if (header.getHeaderline("HTTP2-Settings").length() != 0) {
           handleHTTP2Request(socket, buffer);
-      } else {       
-          read(socket, buffer, 1024);
-          std::cout << std::string(buffer) << std::endl;
-          
+      } else {
           string html = read_htmlfile("www/test.html");
           write(socket, html.c_str(), html.length());
-          std::cout << html << std::endl;
+          //std::cout << html << std::endl;
           
-          /*write(socket, res->c_str(), res->size());*/
+          //write(socket, res->c_str(), res->size());
           std::cout << "Response sent" << std::endl;
           
           close(socket);
