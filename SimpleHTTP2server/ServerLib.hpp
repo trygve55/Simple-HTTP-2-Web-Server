@@ -27,7 +27,6 @@ private:
   int handleRequest();
   int handleHTTP2Request(int new_Socket, char buffer[1024]);
   int findHeaderEnd(char buffer[1024]);
-  int findStringInCharArray(std::string string, char buffer[1024]);
   
 public:
   std::function<int(int socket, std::string *res)> thread_action;

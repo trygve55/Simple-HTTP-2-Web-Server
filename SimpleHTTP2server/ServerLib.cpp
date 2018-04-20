@@ -1,5 +1,6 @@
 #include "ServerLib.hpp"
 #include "ReadFile.cpp"
+#include "HeaderParser.cpp"
 
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
@@ -9,7 +10,9 @@ ServerLib::ServerLib(int port) : port(port) {
         
       read(socket, buffer, 1024);
       
-      int headerEnd = findHeaderEnd(buffer);
+      ParseHeader(buffer, 1024);
+      
+      //std::cout << findStringInCharArray("\r\n\r\n", buffer, 1024) << std::endl;
       
       if (false) {
           handleHTTP2Request(socket, buffer);
@@ -74,25 +77,7 @@ int ServerLib::handleRequest() {
             perror("accept");
             return -1;
         }
-        /*std::thread ([&new_socket, res]() {
-            char buffer[1024] = {0};
-            
-            std::cout << "connected" << std::endl;
-              
-            read(new_socket, buffer, 1024);
->>>>>>> e9c9e64b4a20655d6b19117a0d9ce357e921c7f4
-            std::cout << std::string(buffer) << std::endl;
-            
-            write(new_socket, res.c_str(), res.size());
-            std::cout << "response sent"<< std::endl;
-            
-            close(new_socket);
-<<<<<<< HEAD
-        }
-    }).detach();
-  
-=======
-        }).detach();*/
+
         std::thread (thread_action, new_socket, &defaultResponse).detach();// Execute the function upon connection.
       }
     return 0;
@@ -119,7 +104,3 @@ int ServerLib::findHeaderEnd(char buffer[1024]) {
     return 0;
 }
 
-int ServerLib::findStringInCharArray(std::string string, char buffer[1024]) {
-    
-    return 0;
-}
