@@ -1,4 +1,5 @@
 #include "ServerLib.hpp"
+#include "ReadFile.cpp"
 
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
@@ -9,7 +10,11 @@ ServerLib::ServerLib(int port) : port(port) {
       read(socket, buffer, 1024);
       std::cout << std::string(buffer) << std::endl;
       
-      write(socket, res->c_str(), res->size());
+      string html = read_htmlfile("www/test.html");
+      write(socket, html.c_str(), html.length());
+      std::cout << html << std::endl;
+      
+      /*write(socket, res->c_str(), res->size());*/
       std::cout << "Response sent" << std::endl;
       
       close(socket);
