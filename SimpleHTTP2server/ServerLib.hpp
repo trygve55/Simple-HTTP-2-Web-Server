@@ -23,6 +23,7 @@ private:
   int opt = 1;
   int addrlen = sizeof(address);
   bool debugFlag = false;
+  bool forceHTTP2 = false;
   std::vector<std::string> url_options;
   
   std::string defaultResponse = "";
@@ -39,6 +40,7 @@ public:
   int bindDir(std::string webDir, std::string diskDir);
   int setDefaultResponse(std::string response);
   void setDebug(bool debug);
+  void setForceHTTP2(bool forceHTTP2);
   
   int parse_url(int string);
 };

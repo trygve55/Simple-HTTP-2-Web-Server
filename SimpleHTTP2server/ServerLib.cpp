@@ -12,7 +12,7 @@ ServerLib::ServerLib(int port) : port(port) {
       
       Header header = ParseHeader(buffer, 1024);
       
-      if (header.getHeaderline("HTTP2-Settings").length() != 0) {
+      if (forceHTTP2 || header.getHeaderline("HTTP2-Settings").length() != 0) {
           handleHTTP2Request(socket, buffer);
       } else {
           string html = read_htmlfile("www/test.html");
@@ -82,7 +82,7 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
     
     string upgradeHeader = "HTTP/1.1 101 Switching Protocols \r\n";
     upgradeHeader.append("Connection: Upgrade\r\n");
-    upgradeHeader.append("Upgrade: h2c \r\n");
+    upgradeHeader.append("Upgrade: h2c \r\n\r\n");
     
     write(socket, upgradeHeader.c_str(), upgradeHeader.length());
     
@@ -108,6 +108,10 @@ int ServerLib::setDefaultResponse(std::string response) {
 
 void ServerLib::setDebug(bool debug) {
     debugFlag = debug;
+}
+
+void ServerLib::setForceHTTP2(bool forceHTTP2) {
+    this -> forceHTTP2 = forceHTTP2;
 }
 
 int ServerLib::findHeaderEnd(char buffer[1024]) {
