@@ -3,8 +3,7 @@
 #define PORT 8080
 #include "SimpleHTTP2server/ServerLib.hpp"
 
-int main()
-{
+int main() {
     ServerLib server(8080);
     
     std::string defaultResponse = "HTTP/2.0 200 OK\r\n" ;

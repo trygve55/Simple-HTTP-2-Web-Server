@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 build
 # Prerequisites
 *.d
@@ -31,3 +32,7 @@ build
 *.exe
 *.out
 *.app
+=======
+.build
+build/
+>>>>>>> e9c9e64b4a20655d6b19117a0d9ce357e921c7f4
