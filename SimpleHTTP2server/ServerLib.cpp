@@ -1,6 +1,7 @@
 #include "ServerLib.hpp"
 #include "ReadFile.cpp"
 #include "HeaderParser.cpp"
+#include "HTTP2Frame.cpp"
 
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
@@ -12,7 +13,7 @@ ServerLib::ServerLib(int port) : port(port) {
       
       Header header = ParseHeader(buffer, 1024);
       
-      if (forceHTTP2 || header.getHeaderline("HTTP2-Settings").length() != 0) {
+      if (forceHTTP2 || header.getHeaderline("upgrade").length() != 0) {
           handleHTTP2Request(socket, buffer);
       } else {
           string html = read_htmlfile("www/test.html");
@@ -88,11 +89,39 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
     
     std::cout << "Upgraded to HTTP2" << std::endl;
     
+    //Sending setting frame start
+    HTTP2Frame test;
+    
+    test.setType(4);
+    
+    char payload[0];
+    test.setPayload(payload);
+    
+    //std::cout << test.debugFrame()<< std::endl;
+    
+    //write(socket, test.getFrame(), test.getSize());
+    //Sending setting frame end
+    
+    //reads client upgrade header
+    read(socket, buffer, 24);
+    
+    int bytesRead;
     while (true) {
-        memset(buffer, 0, sizeof(buffer));
-        if (read(socket, buffer, 1024)) {
-            std::cout << buffer << std::endl;
+        bytesRead = read(socket, buffer, 1024);
+        
+        if (bytesRead > 0) {
+            std::cout << "bytes: " << bytesRead << " ";
+            for(int i=0; i< bytesRead; ++i)
+                std::cout << std::hex << (int)buffer[i];
+            std::cout << std::endl;
+            
+            if (bytesRead < 20) {
+                HTTP2Frame goaway(buffer, bytesRead);
+                std::cout << "test 2:   " << goaway.debugFrame() << std::endl;
+            }
         }
+            //std::cout << buffer << std::endl;
+        
         std::this_thread::sleep_for (std::chrono::seconds(1));
     }
     

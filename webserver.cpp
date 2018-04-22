@@ -14,7 +14,7 @@ int main() {
     defaultResponse.append("</BODY></HTML>\r\n");
     
     server.setDefaultResponse(defaultResponse);
-    server.setForceHTTP2(true);
+    //server.setForceHTTP2(true);
     
     if (server.startServer() != 0) std::cout << "Error starting server." << std::endl;
     
