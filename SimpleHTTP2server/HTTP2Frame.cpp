@@ -5,7 +5,7 @@ HTTP2Frame::HTTP2Frame() {
   
 }
 
-HTTP2Frame::HTTP2Frame(const char buffer[], const int bufferSize) {
+HTTP2Frame::HTTP2Frame(const char buffer[]) {
   length += buffer[0] << 16;
   length += buffer[1] << 8;
   length += buffer[2];
@@ -19,11 +19,11 @@ HTTP2Frame::HTTP2Frame(const char buffer[], const int bufferSize) {
   for (unsigned int i = 0; i < length;i++) payload[i] = buffer[9+i];
 }
 
-unsigned int HTTP2Frame::getLength() {
+unsigned int const& HTTP2Frame::getLength() {
   return length;
 }
 
-unsigned int HTTP2Frame::getSize() {
+unsigned int const& HTTP2Frame::getSize() {
   return length + 9;
 }
 
@@ -56,19 +56,19 @@ void HTTP2Frame::setStreamIdentifier(unsigned int streamIdentifier) {
   this -> streamIdentifier = streamIdentifier;
 }
 
-uint8_t HTTP2Frame::getType() {
+uint8_t const& HTTP2Frame::getType() {
   return type;
 }
 
-uint8_t HTTP2Frame::getFlags() {
+uint8_t const& HTTP2Frame::getFlags() {
   return flags;
 }
 
-unsigned int HTTP2Frame::getStreamIdentifier() {
+unsigned int const& HTTP2Frame::getStreamIdentifier() {
   return streamIdentifier;
 }
 
-char* HTTP2Frame::getFrame() {
+char* const& HTTP2Frame::getFrame() {
   frame[0] = (length >> 16) & 0xFF;
   frame[1] = (length >> 8) & 0xFF;
   frame[2] = length & 0xFF;
@@ -99,7 +99,18 @@ std::string HTTP2Frame::debugFrame() {
 static std::vector<HTTP2Frame> bufferToFrames(const char buffer[], const int bufferSize) {
   std::vector<HTTP2Frame> frames;
   int iterator = 0;
+  unsigned int frameLength;
   while (iterator < bufferSize) {
+    frameLength = 9;
+    frameLength += buffer[iterator] << 16;
+    frameLength += buffer[iterator + 1] << 8;
+    frameLength += buffer[iterator + 2];
     
+    HTTP2Frame frame(&buffer[iterator]);
+    frames.emplace_back(frame);
+    
+    iterator += frameLength;
   }
+  
+  return frames;
 }

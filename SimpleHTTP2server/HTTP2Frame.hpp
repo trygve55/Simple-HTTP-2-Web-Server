@@ -23,17 +23,17 @@ private:
   
 public:
   HTTP2Frame();
-  HTTP2Frame(const char buffer[], const int bufferSize);
-  unsigned int getLength();
-  unsigned int getSize();
+  HTTP2Frame(const char buffer[]);
+  unsigned int const& getLength();
+  unsigned int const& getSize();
   void setPayload(char payload[]);
   void setType(uint8_t type);
   void setFlags(uint8_t flags);
   void setStreamIdentifier(unsigned int streamIdentifier);
-  uint8_t getType();
-  uint8_t getFlags();
-  unsigned int getStreamIdentifier();
-  char* getFrame();
+  uint8_t const& getType();
+  uint8_t const& getFlags();
+  unsigned int const& getStreamIdentifier();
+  char* const& getFrame();
   
   std::string debugFrame();
   

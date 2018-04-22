@@ -3,20 +3,21 @@
 
 int findStringInCharArray(std::string string, char buffer[], size_t bufferSize);
 
-Header ParseHeader(char buffer[], size_t bufferSize) {
+Header ParseHeader(char buffer[]) {
   Header headerObject;
   
   std::string inString(buffer);
   std::string headerString(inString.substr(0, inString.find("\r\n\r\n")));
   
-  int next = 0,iterator = headerString.find("\r\n");
+  int next = 0;
+  size_t iterator = headerString.find("\r\n");
   std::string headerline, content;
   
   std::cout << inString << std::endl;
   
   while(iterator < headerString.length()) {
     next = headerString.find(":", iterator);
-    headerline = headerString.substr(iterator + 2, next - iterator - 2);
+    headerline = headerString.substr(iterator + 2, next - iterator - 3);
     iterator = next;
     next = headerString.find("\r\n", iterator);
     content = headerString.substr(iterator+ 2, next - iterator - 2);

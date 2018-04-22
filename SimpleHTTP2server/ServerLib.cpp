@@ -7,20 +7,21 @@ ServerLib::ServerLib(int port) : port(port) {
   // Temporary
   thread_action = [this](int socket, std::string *res) {
       char buffer[1024] = {0};
-      std::cout << "connected" << std::endl;
+      std::cout << "Client Connected" << std::endl;
         
       read(socket, buffer, 1024);
       
-      Header header = ParseHeader(buffer, 1024);
+      Header header = ParseHeader(buffer);
       
-      if (forceHTTP2 || header.getHeaderline("upgrade").length() != 0) {
+      std::cout << header.getHeaderline("upgrade") << std::endl;
+      
+      if (forceHTTP2 || header.getHeaderline("upgrade").compare("h2c")) {
+          //Upgrade connection to HTTP2(h2c)
           handleHTTP2Request(socket, buffer);
       } else {
+          //Respond as HTTP 1.1
           string html = read_htmlfile("www/test.html");
           write(socket, html.c_str(), html.length());
-          //std::cout << html << std::endl;
-          
-          //write(socket, res->c_str(), res->size());
           std::cout << "Response sent" << std::endl;
           
           close(socket);
@@ -87,7 +88,7 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
     
     write(socket, upgradeHeader.c_str(), upgradeHeader.length());
     
-    std::cout << "Upgraded to HTTP2" << std::endl;
+    std::cout << "Upgraded connection to HTTP2(h2c)" << std::endl;
     
     //Sending setting frame start
     HTTP2Frame test;
@@ -110,14 +111,20 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
         bytesRead = read(socket, buffer, 1024);
         
         if (bytesRead > 0) {
-            std::cout << "bytes: " << bytesRead << " ";
+            std::cout << "Bytes received: " << bytesRead << " ";
             for(int i=0; i< bytesRead; ++i)
                 std::cout << std::hex << (int)buffer[i];
             std::cout << std::endl;
             
-            if (bytesRead < 20) {
-                HTTP2Frame goaway(buffer, bytesRead);
-                std::cout << "test 2:   " << goaway.debugFrame() << std::endl;
+            vector<HTTP2Frame> receivedFrames = bufferToFrames(buffer, bytesRead);
+            
+            std::cout << "Frames received: " << receivedFrames.size() << std::endl;
+            
+            //Handle received frames
+            for (auto frame: receivedFrames) {
+                if (frame.getType() == 7) {
+                    std::cout << "GOAWAY frame received. No new streams allowed." << std::endl;
+                }
             }
         }
             //std::cout << buffer << std::endl;
@@ -125,7 +132,7 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
         std::this_thread::sleep_for (std::chrono::seconds(1));
     }
     
-    //close(new_socket);
+    //close(socket);
     
     return 0;
 }
