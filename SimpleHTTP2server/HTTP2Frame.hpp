@@ -19,23 +19,23 @@ private:
   unsigned int streamIdentifier = 0; 
   char payload[1024] = {0};
   unsigned int length = 0;
-  char frame[1024]= {0};
+  //char frame[1024]= {0};
   
 public:
   HTTP2Frame();
   HTTP2Frame(const char buffer[]);
   unsigned int const& getLength();
   unsigned int const& getSize();
-  void setPayload(char payload[]);
+  void setPayload(char payload[], unsigned int payloadSize);
   void setType(uint8_t type);
   void setFlags(uint8_t flags);
   void setStreamIdentifier(unsigned int streamIdentifier);
   uint8_t const& getType();
   uint8_t const& getFlags();
   unsigned int const& getStreamIdentifier();
-  char* const& getFrame();
+  void getFrame(char *frame);
   
-  std::string debugFrame();
+  std::string debugFrame(char *frame);
   
   static std::vector<HTTP2Frame> bufferToFrames(const char buffer[], const int bufferSize);
 };

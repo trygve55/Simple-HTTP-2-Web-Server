@@ -91,16 +91,21 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
     std::cout << "Upgraded connection to HTTP2(h2c)" << std::endl;
     
     //Sending setting frame start
-    HTTP2Frame test;
+    HTTP2Frame settingsFrame;
     
-    test.setType(4);
-    
+    std::cout << "test 0" << std::endl;
+    settingsFrame.setType(4);
+    std::cout << "test 1" << std::endl;
     char payload[0];
-    test.setPayload(payload);
-    
-    //std::cout << test.debugFrame()<< std::endl;
-    
-    //write(socket, test.getFrame(), test.getSize());
+    std::cout << "test 2" << std::endl;
+    settingsFrame.setPayload(payload, 0);
+    std::cout << "test 2.5" << std::endl;
+    char frame[1024]= {0};
+    std::cout << settingsFrame.debugFrame(frame)<< std::endl;
+    std::cout << "test 3" << std::endl;
+    //settingsFrame.getFrame(frame);
+    write(socket, frame, settingsFrame.getSize());
+    std::cout << "test 4" << std::endl;
     //Sending setting frame end
     
     //reads client upgrade header

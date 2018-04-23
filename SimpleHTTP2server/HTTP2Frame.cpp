@@ -27,9 +27,10 @@ unsigned int const& HTTP2Frame::getSize() {
   return length + 9;
 }
 
-void HTTP2Frame::setPayload(char newPayload[]) {
-  for (unsigned int  i = 0; i < sizeof(newPayload);i++) payload[i] = newPayload[i];
-  length = sizeof(newPayload);
+void HTTP2Frame::setPayload(char newPayload[], unsigned int payloadSize) {
+  for (unsigned int  i = 0; i < payloadSize;i++) payload[i] = newPayload[i];
+  length = payloadSize;
+  std::cout << "size: " << length << std::endl;
 }
 
 void HTTP2Frame::setType(uint8_t type) {
@@ -68,31 +69,44 @@ unsigned int const& HTTP2Frame::getStreamIdentifier() {
   return streamIdentifier;
 }
 
-char* const& HTTP2Frame::getFrame() {
+void HTTP2Frame::getFrame(char *frame) {
+  
+  std::cout << "test 2.5.0" << std::endl;
   frame[0] = (length >> 16) & 0xFF;
   frame[1] = (length >> 8) & 0xFF;
   frame[2] = length & 0xFF;
   frame[3] = type;
+  std::cout << "test 2.5.3" << std::endl;
   frame[4] = flags;
   frame[5] = (streamIdentifier >> 24) & 0xFF;
   frame[6] = (streamIdentifier >> 16) & 0xFF;
   frame[7] = (streamIdentifier >> 8) & 0xFF;
+  std::cout << "test 2.5.7" << std::endl;
   frame[8] = streamIdentifier & 0xFF;
+  std::cout << "test 2.5.8" << std::endl;
   
-  for (unsigned int  i = 0; i < length;i++) frame[9 + i] = payload[i];
+  std::cout << "test 2.5.9 " << length << std::endl;
+  
+  for (unsigned int i = 0; i < length;i++) {
+    std::cout << "i : " << i << std::endl;
+    frame[9 + i] = payload[i];
+  }
   
   //std::copy(frame + 9, payload, 0);
-  
-  return frame;
 }
 
-std::string HTTP2Frame::debugFrame() {
+std::string HTTP2Frame::debugFrame(char *frame) {
   
-  getFrame();
+  getFrame(frame);
+  
+  std::cout << "test 2.6" << std::endl;
   
   std::stringstream ss;
-  for(unsigned int i=0; i<getSize(); ++i)
+  std::cout << "test 2.6.1" << std::endl;
+  for(unsigned int i=0; i<length+9; ++i) {
+      std::cout << "test 2.7 " << i << std::endl;
       ss << std::hex << (int)frame[i];
+    }
   return ss.str();
 }
 
