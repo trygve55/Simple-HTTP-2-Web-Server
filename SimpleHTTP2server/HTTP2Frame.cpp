@@ -23,8 +23,8 @@ unsigned int const& HTTP2Frame::getLength() {
   return length;
 }
 
-unsigned int const& HTTP2Frame::getSize() {
-  return length + 9;
+unsigned int HTTP2Frame::getSize() {
+  return 9 + length;
 }
 
 void HTTP2Frame::setPayload(char newPayload[]) {
