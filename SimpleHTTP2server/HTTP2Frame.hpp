@@ -25,8 +25,8 @@ public:
   HTTP2Frame();
   HTTP2Frame(const char buffer[]);
   unsigned int const& getLength();
-  unsigned int const& getSize();
   void setPayload(char payload[], unsigned int payloadSize);
+  unsigned int getSize();
   void setType(uint8_t type);
   void setFlags(uint8_t flags);
   void setStreamIdentifier(unsigned int streamIdentifier);
