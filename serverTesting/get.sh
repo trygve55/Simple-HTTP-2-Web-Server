@@ -1,2 +1,2 @@
-nghttp -vu http://localhost:8080/
+nghttp -vu --hexdump http://localhost:8080/
 
