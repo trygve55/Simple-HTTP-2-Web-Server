@@ -20,7 +20,7 @@ Header ParseHeader(char buffer[]) {
     headerline = headerString.substr(iterator + 2, next - iterator - 3);
     iterator = next;
     next = headerString.find("\r\n", iterator);
-    content = headerString.substr(iterator+ 2, next - iterator - 2);
+    content = headerString.substr(iterator+ 2, next - iterator - 4);
     iterator = next;
     
     headerObject.setHeaderline(headerline, content);
