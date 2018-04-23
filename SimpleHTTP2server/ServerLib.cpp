@@ -2,6 +2,7 @@
 #include "ReadFile.cpp"
 #include "HeaderParser.cpp"
 #include "HTTP2Frame.cpp"
+#include "Settings.hpp"
 
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
@@ -130,6 +131,7 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
                     std::cout << "Payload length > 0, but ACK is set. TCP terminated." << std::endl;
                 }
                 switch (frame.getType()) {
+                // Use inheritance for frame types?
                 case 0:
                     std::cout << "Received DATA frame" << std::endl;
                     break;
@@ -143,8 +145,19 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
                     std::cout << "Received RST_STREAM frame" << std::endl;
                     break;
                 case 4:
+                    /*
+                     * SETTINGS_HEADER_TABLE_SIZE (0x1)
+                     * SETTINGS_ENABLE_PUSH (0x2)
+                     * SETTINGS_MAX_CONCURRENT_STREAMS (0x3)
+                     * SETTINGS_INITIAL_WINDOW_SIZE (0x4)
+                     * SETTINGS_MAX_FRAME_SIZE (0x5)
+                     * SETTINGS_MAX_HEADER_LIST_SIZE (0x6)
+                     */
                     std::cout << "Received SETTINGS frame" << std::endl;
                     if (frame.getFlags() != 0x01) {
+                        
+                        Settings settings;// TODO how to get settings from frame?
+                        
                         //Sending setting frame start
                         HTTP2Frame settingsACK;
                         

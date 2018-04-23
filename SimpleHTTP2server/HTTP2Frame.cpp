@@ -1,6 +1,5 @@
 #include "HTTP2Frame.hpp"
 
-
 HTTP2Frame::HTTP2Frame() {
   
 }
