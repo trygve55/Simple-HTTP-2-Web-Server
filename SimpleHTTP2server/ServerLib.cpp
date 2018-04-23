@@ -93,19 +93,13 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
     //Sending setting frame start
     HTTP2Frame settingsFrame;
     
-    std::cout << "test 0" << std::endl;
     settingsFrame.setType(4);
-    std::cout << "test 1" << std::endl;
     char payload[0];
-    std::cout << "test 2" << std::endl;
     settingsFrame.setPayload(payload, 0);
-    std::cout << "test 2.5" << std::endl;
     char frame[1024]= {0};
+    settingsFrame.getFrame(frame);
     std::cout << settingsFrame.debugFrame(frame)<< std::endl;
-    std::cout << "test 3" << std::endl;
-    //settingsFrame.getFrame(frame);
     write(socket, frame, settingsFrame.getSize());
-    std::cout << "test 4" << std::endl;
     //Sending setting frame end
     
     //reads client upgrade header
@@ -127,6 +121,20 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
             
             //Handle received frames
             for (auto frame: receivedFrames) {
+                if (frame.getType() == 4 && frame.getFlags() != 0x01) {
+                    //Sending setting frame start
+                    HTTP2Frame settingsFrameACK;
+                    
+                    settingsFrameACK.setType(4);
+                    settingsFrameACK.setFlags(0x01);
+                    settingsFrameACK.setPayload(payload, 0);
+                    char frame2[1024]= {0};
+                    settingsFrameACK.getFrame(frame2);
+                    std::cout << settingsFrameACK.debugFrame(frame2)<< std::endl;
+                    write(socket, frame2, settingsFrameACK.getSize());
+                    //Sending setting frame end
+                } 
+                
                 if (frame.getType() == 7) {
                     std::cout << "GOAWAY frame received. No new streams allowed." << std::endl;
                 }

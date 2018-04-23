@@ -70,25 +70,17 @@ unsigned int const& HTTP2Frame::getStreamIdentifier() {
 }
 
 void HTTP2Frame::getFrame(char *frame) {
-  
-  std::cout << "test 2.5.0" << std::endl;
   frame[0] = (length >> 16) & 0xFF;
   frame[1] = (length >> 8) & 0xFF;
   frame[2] = length & 0xFF;
   frame[3] = type;
-  std::cout << "test 2.5.3" << std::endl;
   frame[4] = flags;
   frame[5] = (streamIdentifier >> 24) & 0xFF;
   frame[6] = (streamIdentifier >> 16) & 0xFF;
   frame[7] = (streamIdentifier >> 8) & 0xFF;
-  std::cout << "test 2.5.7" << std::endl;
   frame[8] = streamIdentifier & 0xFF;
-  std::cout << "test 2.5.8" << std::endl;
-  
-  std::cout << "test 2.5.9 " << length << std::endl;
   
   for (unsigned int i = 0; i < length;i++) {
-    std::cout << "i : " << i << std::endl;
     frame[9 + i] = payload[i];
   }
   
@@ -97,14 +89,10 @@ void HTTP2Frame::getFrame(char *frame) {
 
 std::string HTTP2Frame::debugFrame(char *frame) {
   
-  getFrame(frame);
-  
-  std::cout << "test 2.6" << std::endl;
+  //getFrame(frame);
   
   std::stringstream ss;
-  std::cout << "test 2.6.1" << std::endl;
   for(unsigned int i=0; i<length+9; ++i) {
-      std::cout << "test 2.7 " << i << std::endl;
       ss << std::hex << (int)frame[i];
     }
   return ss.str();
