@@ -24,7 +24,7 @@ public:
   HTTP2Frame();
   HTTP2Frame(const char buffer[]);
   unsigned int const& getLength();
-  void setPayload(char payload[], unsigned int payloadSize);
+  void setPayload(char const payload[], unsigned int payloadSize);
   char* getPayload() {return payload;}
   unsigned int getSize();
   void setType(uint8_t type);

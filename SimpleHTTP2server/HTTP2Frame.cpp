@@ -26,7 +26,7 @@ unsigned int HTTP2Frame::getSize() {
   return 9 + length;
 }
 
-void HTTP2Frame::setPayload(char newPayload[], unsigned int payloadSize) {
+void HTTP2Frame::setPayload(char const newPayload[], unsigned int payloadSize) {
   for (unsigned int  i = 0; i < payloadSize;i++) payload[i] = newPayload[i];
   length = payloadSize;
   std::cout << "size: " << length << std::endl;

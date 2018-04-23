@@ -21,14 +21,12 @@ private:
   int opt = 1;
   int addrlen = sizeof(address);
   bool debugFlag = false;
-  bool forceHTTP2 = false;
   std::vector<std::string> url_options;
   
   std::string defaultResponse = "";
   
   int handleRequest();
   int handleHTTP2Request(int new_Socket, char buffer[1024]);
-  int findHeaderEnd(char buffer[1024]);
   
 public:
   std::function<int(int socket, std::string *res)> thread_action;
@@ -38,7 +36,6 @@ public:
   int bindDir(std::string webDir, std::string diskDir);
   int setDefaultResponse(std::string response);
   void setDebug(bool debug);
-  void setForceHTTP2(bool forceHTTP2);
   void connectionError(int socket, unsigned int lastOKID);
   
   int parse_url(int string);

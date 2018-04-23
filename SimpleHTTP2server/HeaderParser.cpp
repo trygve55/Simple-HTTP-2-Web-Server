@@ -17,15 +17,15 @@ Header ParseHeader(char buffer[]) {
   
   while(iterator < headerString.length()) {
     next = headerString.find(":", iterator);
-    headerline = headerString.substr(iterator + 2, next - iterator - 3);
+    headerline = headerString.substr(iterator + 2, next - iterator - 2);
     iterator = next;
     next = headerString.find("\r\n", iterator);
-    content = headerString.substr(iterator+ 2, next - iterator - 4);
+    content = headerString.substr(iterator+ 2, next - iterator - 2);
     iterator = next;
     
     headerObject.setHeaderline(headerline, content);
     
-    //std::cout << "header: " << headerline << " content: " << content << std::endl;
+    std::cout << "header: " << headerline << " content: " << content << std::endl;
   }
   
   return headerObject;
