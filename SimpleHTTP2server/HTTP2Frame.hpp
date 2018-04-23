@@ -2,11 +2,10 @@
 #define HTTP2FRAME_HPP
 
 #include <string>
-#include <stdio.h>
-#include <string.h>
 #include <sstream>
 #include <iostream>
 #include <netinet/in.h>
+#include <unistd.h>
 #include <vector>
 
 //using namespace std;
@@ -26,6 +25,7 @@ public:
   HTTP2Frame(const char buffer[]);
   unsigned int const& getLength();
   void setPayload(char payload[], unsigned int payloadSize);
+  char* getPayload() {return payload;}
   unsigned int getSize();
   void setType(uint8_t type);
   void setFlags(uint8_t flags);
@@ -34,10 +34,12 @@ public:
   uint8_t const& getFlags();
   unsigned int const& getStreamIdentifier();
   void getFrame(char *frame);
+  ssize_t sendFrame(int socket);
+  void emptyPayload() {length = 0;}
   
   std::string debugFrame(char *frame);
-  
-  static std::vector<HTTP2Frame> bufferToFrames(const char buffer[], const int bufferSize);
 };
+
+static std::vector<HTTP2Frame> bufferToFrames(const char buffer[], const int bufferSize);
 
 #endif

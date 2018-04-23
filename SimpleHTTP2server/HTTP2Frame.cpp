@@ -116,3 +116,10 @@ static std::vector<HTTP2Frame> bufferToFrames(const char buffer[], const int buf
   
   return frames;
 }
+
+ssize_t HTTP2Frame::sendFrame(int socket) {
+  char f[1024] = {0};
+  getFrame(f);
+  std::cout << debugFrame(f) << std::endl;
+  return write(socket, f, getSize());
+}

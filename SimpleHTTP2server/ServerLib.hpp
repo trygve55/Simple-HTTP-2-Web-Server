@@ -10,8 +10,6 @@
 #include <thread>
 #include <functional>
 #include <chrono>
-#include <stdio.h>
-#include <string.h>
 
 //using namespace std;
 
@@ -41,6 +39,7 @@ public:
   int setDefaultResponse(std::string response);
   void setDebug(bool debug);
   void setForceHTTP2(bool forceHTTP2);
+  void connectionError(int socket, unsigned int lastOKID);
   
   int parse_url(int string);
 };

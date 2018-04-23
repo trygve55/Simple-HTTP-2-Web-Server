@@ -106,7 +106,9 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
     read(socket, buffer, 24);
     
     int bytesRead;
-    while (true) {
+    unsigned int lastOKIdentifier = -1;
+    bool terminate = 0;
+    while (!terminate) {
         bytesRead = read(socket, buffer, 1024);
         
         if (bytesRead > 0) {
@@ -121,23 +123,56 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
             
             //Handle received frames
             for (auto frame: receivedFrames) {
-                if (frame.getType() == 4 && frame.getFlags() != 0x01) {
-                    //Sending setting frame start
-                    HTTP2Frame settingsFrameACK;
-                    
-                    settingsFrameACK.setType(4);
-                    settingsFrameACK.setFlags(0x01);
-                    settingsFrameACK.setPayload(payload, 0);
-                    char frame2[1024]= {0};
-                    settingsFrameACK.getFrame(frame2);
-                    std::cout << settingsFrameACK.debugFrame(frame2)<< std::endl;
-                    write(socket, frame2, settingsFrameACK.getSize());
-                    //Sending setting frame end
-                } 
-                
-                if (frame.getType() == 7) {
-                    std::cout << "GOAWAY frame received. No new streams allowed." << std::endl;
+                auto streamID = frame.getStreamIdentifier();
+                if (frame.getLength() > 0 && (frame.getFlags() & 0x01) == 1) {
+                    connectionError(socket, lastOKIdentifier);
+                    terminate = 1;
+                    std::cout << "Payload length > 0, but ACK is set. TCP terminated." << std::endl;
                 }
+                switch (frame.getType()) {
+                case 0:
+                    std::cout << "Received DATA frame" << std::endl;
+                    break;
+                case 1:
+                    std::cout << "Received HEADERS frame" << std::endl;
+                    break;
+                case 2:
+                    std::cout << "Received PRIORITY frame" << std::endl;
+                    break;
+                case 3:
+                    std::cout << "Received RST_STREAM frame" << std::endl;
+                    break;
+                case 4:
+                    std::cout << "Received SETTINGS frame" << std::endl;
+                    if (frame.getFlags() != 0x01) {
+                        //Sending setting frame start
+                        HTTP2Frame settingsACK;
+                        
+                        settingsACK.setType(4);
+                        settingsACK.setFlags(0x01);
+                        settingsACK.setStreamIdentifier(0);
+                        settingsACK.sendFrame(socket);
+                        //Sending setting frame end
+                    }
+                    break;
+                case 5:
+                    std::cout << "Received PUSH_PROMISE frame" << std::endl;
+                    break;
+                case 6:
+                    std::cout << "Received PING frame" << std::endl;
+                    break;
+                case 7:
+                    std::cout << "GOAWAY frame received. No new streams allowed." << std::endl;
+                    terminate = 1;
+                    break;
+                case 8:
+                    std::cout << "Received WINDOW_UPDATE frame" << std::endl;
+                    break;
+                case 9:
+                    std::cout << "Received CONTINUATION frame" << std::endl;
+                    break;
+                }
+                lastOKIdentifier = streamID;
             }
         }
             //std::cout << buffer << std::endl;
@@ -167,3 +202,10 @@ int ServerLib::findHeaderEnd(char buffer[1024]) {
     return 0;
 }
 
+void ServerLib::connectionError(int socket, unsigned int lastOKID) {
+    HTTP2Frame goAway;
+    goAway.setType(7);
+    goAway.setStreamIdentifier(lastOKID);
+    goAway.sendFrame(socket);
+    close(socket);
+}
