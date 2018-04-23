@@ -9,11 +9,13 @@
 class HTTP2Stream {
 private:
   unsigned int state;
+  unsigned int streamIdentifier;
   
 public:
-  HTTP2Stream(const int streamIdentifier);
+  HTTP2Stream(const unsigned int streamIdentifier);
   HTTP2Stream();
-  void setState(const unsigned int stage);
+  void setState(const unsigned int newState);
+  void getStreamIdentifier();
   unsigned int getStage();
 };
 

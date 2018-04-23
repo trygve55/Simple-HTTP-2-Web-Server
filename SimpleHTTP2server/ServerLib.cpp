@@ -2,8 +2,8 @@
 #include "ReadFile.cpp"
 #include "HeaderParser.cpp"
 #include "HTTP2Frame.cpp"
-#include "Settings.hpp"
-#include "Stream.hpp"
+#include "HTTP2Stream.hpp"
+#include "HTTP2Connection.hpp"
 
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
@@ -17,7 +17,7 @@ ServerLib::ServerLib(int port) : port(port) {
       
       std::cout << header.getHeaderline("upgrade") << std::endl;
       
-      if (true || header.getHeaderline("upgrade").compare("h2c") == 0) {
+      if (header.getHeaderline("upgrade").compare("h2c") == 0) {
           //Upgrade connection to HTTP2(h2c)
           handleHTTP2Request(socket, buffer);
       } else {
@@ -83,6 +83,8 @@ int ServerLib::handleRequest() {
 }
 
 int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
+    
+    //HTTP2Connection connection(socket, buffer);
     
     string upgradeHeader = "HTTP/1.1 101 Switching Protocols \r\n";
     upgradeHeader.append("Connection: Upgrade\r\n");
