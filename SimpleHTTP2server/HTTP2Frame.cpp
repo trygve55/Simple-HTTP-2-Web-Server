@@ -52,8 +52,8 @@ void HTTP2Frame::setFlags(uint8_t flags) {
   this -> flags = flags;
 }
 
-void HTTP2Frame::setStreamIdentifier(unsigned int streamIdentifier) {
-  this -> streamIdentifier = streamIdentifier;
+void HTTP2Frame::setStreamIdentifier(unsigned int newStreamIdentifier) {
+  streamIdentifier = newStreamIdentifier;
 }
 
 uint8_t const& HTTP2Frame::getType() {

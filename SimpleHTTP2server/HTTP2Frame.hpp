@@ -29,7 +29,7 @@ public:
   unsigned int getSize();
   void setType(uint8_t type);
   void setFlags(uint8_t flags);
-  void setStreamIdentifier(unsigned int streamIdentifier);
+  void setStreamIdentifier(unsigned int newStreamIdentifier);
   uint8_t const& getType();
   uint8_t const& getFlags();
   unsigned int const& getStreamIdentifier();
