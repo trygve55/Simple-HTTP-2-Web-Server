@@ -27,9 +27,7 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
     char payload[0];
     settingsFrame.setPayload(payload, 0);
     char frame[1024] = {0};
-    settingsFrame.getFrame(frame);
-    std::cout << settingsFrame.debugFrame(frame) << std::endl;
-    write(socket, frame, settingsFrame.getSize());
+    sendFrame(frame);
     //Sending setting frame end
 
     //reads client upgrade header (MAGIC) start

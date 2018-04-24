@@ -28,10 +28,10 @@ bool HTTP2ConnectionSettings::changeSettings(char *payload, unsigned int length)
       break;
     case TypeIDs.MAX_FRAME_SIZE:
       if (value < 16384 || value > 16777215) {return false;}
-      Max_Header_List_Size = value;
+      Max_Frame_Size = value;
       break;
     case TypeIDs.MAX_HEADER_LIST_SIZE:
-      Max_FRAME_Size = value;
+      Max_Header_List_Size = value;
       break;
     default:
       return false;
