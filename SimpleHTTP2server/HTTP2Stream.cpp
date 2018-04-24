@@ -25,6 +25,14 @@ unsigned int HTTP2Stream::getStage() {
   return state;
 }
 
+char HTTP2Stream::getWeight() {
+  return weight;
+}
+
+void HTTP2Stream::setWeight(const char weight) {
+  this -> weight = weight;
+}
+
 void HTTP2Stream::setStreamIdentifier(const int streamIdentifier) {
   this -> streamIdentifier = streamIdentifier;
 }

@@ -1,7 +1,5 @@
 #include "HTTP2ConnectionSettings.hpp"
 
-#include <iostream>
-
 HTTP2ConnectionSettings::HTTP2ConnectionSettings(char *payload, unsigned int length) {
   setSettings(payload, length);
 }
