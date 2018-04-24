@@ -23,20 +23,19 @@ ServerLib::ServerLib(int port) : port(port) {
       } else {
           //Respond as HTTP 1.1
           stringstream responseStream, bodyStream;
-          size_t fSize;
+          int fSize = read_htmlfile(bodyStream, "www/test.html");
           
-          if (fSize = read_htmlfile(bodyStream, "www/test.html") >= 0) {
-              responseStream << "HTTP/2.0 200 OK\r\nContent-length: " << fSize << "\r\n";
+          if (fSize >= 0) {
+              responseStream << "HTTP/1.1 200 OK\r\nContent-length: " << fSize << "\r\n";
               responseStream << "Content-Type: text/html\r\n\r\n";
           } else {
-              responseStream << "HTTP/2.0 500 Internal Server Error";
+              responseStream << "HTTP/1.1 500 Internal Server Error";
           }
           
           responseStream << bodyStream.rdbuf();
           std::string response = responseStream.str();
-          
           write(socket, response.c_str(), response.length());
-          std::cout << "Response sent"  << response << std::endl;
+          std::cout << "Response sent" << std::endl;
           
           close(socket);
       }
