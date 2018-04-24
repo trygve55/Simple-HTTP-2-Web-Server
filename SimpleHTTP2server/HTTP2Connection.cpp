@@ -68,62 +68,10 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
                 case HTTP2Frame::FrameIDs.DATA:
                     std::cout << "Received DATA frame" << std::endl;
                     break;
-                case HTTP2Frame::FrameIDs.HEADERS: {
+                case HTTP2Frame::FrameIDs.HEADERS: 
                     std::cout << "Received HEADERS frame" << std::endl;
-                    
-                    //streams[]
-                    char *receivedPayload = frame.getPayload();
-                    unsigned int iterator = 0;
-                    
-                    streamDependency = -1, padLength = -1, weight = -1;
-                    streamDependencyExclusive = false;
-                    
-                    //Padded flag
-                    if (frame.getFlag(3)) {
-                        padLength = receivedPayload[iterator++];
-                    }
-                    
-                    //Priority flag
-                    if (frame.getFlag(5)) {
-                        streamDependency = 0;
-                        streamDependencyExclusive = (receivedPayload[iterator] & 0x80) >> 7;
-                        streamDependency += (receivedPayload[iterator] << 24) & 0xE;
-                        streamDependency += receivedPayload[iterator + 1] << 16;
-                        streamDependency += receivedPayload[iterator + 2] << 8;
-                        streamDependency += receivedPayload[iterator + 3];
-                        weight = receivedPayload[iterator + 4];
-                        iterator += 5;
-                        
-                        if (frame.getStreamIdentifier() == 0 ) {
-                            connectionError(0, ErrorCodes.PROTOCOL_ERROR);
-                        } else {
-                            setStreamWeight(streamDependency, weight);
-                        }
-                    }
-                    
-                    //End headers flag
-                    if (frame.getFlag(2)) std::cout << "End headers" << std::endl;
-                    
-                    //End stream flag
-                    if (frame.getFlag(0)) {
-                        std::cout << "End stream" << std::endl;
-                        setStreamState(streamDependency, 6);
-                    }
-                    
-                    
-                    //Sending data frame start
-                    HTTP2Frame dataFrame;
-
-                    dataFrame.setType(0);
-                    dataFrame.setFlags(0x01);
-                    dataFrame.setStreamIdentifier(streamDependency);
-                    std::string pay("Test");
-                    dataFrame.setPayload(pay.c_str(), 4);
-                    sendFrame(dataFrame);
-                    //Sending data frame end
-
+                    proccessHeaderFrame(frame);
                     break;
-                }
                 case HTTP2Frame::FrameIDs.PRIORITY: {
                     std::cout << "Received PRIORITY frame" << std::endl;
                     
@@ -210,6 +158,61 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
     }
 
     //close(socket);
+}
+
+void HTTP2Connection::proccessHeaderFrame(HTTP2Frame frame) {
+    //streams[]
+    char *receivedPayload = frame.getPayload();
+    unsigned int iterator = 0;
+    
+    int streamDependency = -1, padLength = -1, weight = -1;
+    bool streamDependencyExclusive = false;
+    
+    //Padded flag
+    if (frame.getFlag(3)) {
+        padLength = receivedPayload[iterator++];
+    }
+    
+    //Priority flag
+    if (frame.getFlag(5)) {
+        streamDependency = 0;
+        streamDependencyExclusive = (receivedPayload[iterator] & 0x80) >> 7;
+        streamDependency += (receivedPayload[iterator] << 24) & 0xE;
+        streamDependency += receivedPayload[iterator + 1] << 16;
+        streamDependency += receivedPayload[iterator + 2] << 8;
+        streamDependency += receivedPayload[iterator + 3];
+        weight = receivedPayload[iterator + 4];
+        iterator += 5;
+        
+        if (frame.getStreamIdentifier() == 0 ) 
+            return connectionError(0, ErrorCodes.PROTOCOL_ERROR);
+        
+        setStreamWeight(streamDependency, weight);    
+    }
+    
+    //End headers flag
+    if (frame.getFlag(2)) std::cout << "End headers" << std::endl;
+    
+    //End stream flag
+    if (frame.getFlag(0)) {
+        std::cout << "End stream" << std::endl;
+        setStreamState(streamDependency, 6);
+    }
+    
+    //Decode header block fragment
+    //pointer = receivedPayload[iterator]
+    //length = frame.length() - iterator
+    
+    //Sending data frame start
+    HTTP2Frame dataFrame;
+    
+    dataFrame.setType(0);
+    dataFrame.setFlags(0x01);
+    dataFrame.setStreamIdentifier(streamDependency);
+    std::string payload("Test");
+    dataFrame.setPayload(payload.c_str(), 4);
+    sendFrame(dataFrame);
+    //Sending data frame end
 }
 
 void HTTP2Connection::streamError(int streamIdentifier, unsigned int errorCode) {

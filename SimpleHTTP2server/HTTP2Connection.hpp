@@ -38,7 +38,7 @@ private:
   } ErrorCodes;
   
   unsigned int connectionId, concurrentStreams;
-  int socket;
+  int socket, lastOkStreamIdentifier;
   char *reciveBuffer, *sendBuffer;
   
   std::map<unsigned int, HTTP2Stream> streams;
@@ -52,6 +52,9 @@ private:
   void setStreamState(int streamIdentifier, unsigned int state);
   void setStreamWeight(int streamIdentifier, char weight);
   HTTP2Stream getStream(int streamIdentifier);
+  
+  void proccessHeaderFrame(HTTP2Frame frame);
+  
 public:
   HTTP2Connection(int socket, char *buffer);
   
