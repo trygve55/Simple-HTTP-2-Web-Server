@@ -142,3 +142,10 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
   */
   //close(socket);
 }
+
+ssize_t HTTP2Connection::sendFrame(HTTP2Frame frame) {
+  char f[1024] = {0};
+  frame.getFrame(f);
+  std::cout << frame.debugFrame(f) << std::endl;
+  return write(socket, f, frame.getSize());
+}

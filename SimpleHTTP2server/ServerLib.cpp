@@ -159,21 +159,12 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
                     std::cout << "Received RST_STREAM frame" << std::endl;
                     break;
                 case 4:
-                    /*
-                     * SETTINGS_HEADER_TABLE_SIZE (0x1)
-                     * SETTINGS_ENABLE_PUSH (0x2)
-                     * SETTINGS_MAX_CONCURRENT_STREAMS (0x3)
-                     * SETTINGS_INITIAL_WINDOW_SIZE (0x4)
-                     * SETTINGS_MAX_FRAME_SIZE (0x5)
-                     * SETTINGS_MAX_HEADER_LIST_SIZE (0x6)
-                     */
                     std::cout << "Received SETTINGS frame" << std::endl;
                     if (frame.getLength() > 0 && (frame.getFlags() & 0x01) == 1) {
                         connectionError(socket, lastOKIdentifier);
                         terminate = 1;
                         std::cout << "Payload length > 0, but ACK is set. TCP terminated." << std::endl;
                     }
-                    
                     
                     if (frame.getFlags() != 0x01) {
                         

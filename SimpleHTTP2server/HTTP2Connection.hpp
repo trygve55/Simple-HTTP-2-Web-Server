@@ -11,6 +11,7 @@
 #include <map>
 #include "HTTP2ConnectionSettings.hpp"
 #include "HTTP2Stream.hpp"
+#include "HTTP2Frame.hpp"
 
 //using namespace std;
 
@@ -32,6 +33,8 @@ public:
   HTTP2Connection(int socket, char *buffer);
   
   unsigned int getConnectionId();
+  
+  ssize_t sendFrame(HTTP2Frame frame);
 };
 
 #endif

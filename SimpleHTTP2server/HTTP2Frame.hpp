@@ -34,7 +34,7 @@ public:
   uint8_t const& getFlags();
   unsigned int const& getStreamIdentifier();
   void getFrame(char *frame);
-  ssize_t sendFrame(int socket);
+  //ssize_t sendFrame(int socket);
   void emptyPayload() {length = 0;}
   
   std::string debugFrame(char *frame);
