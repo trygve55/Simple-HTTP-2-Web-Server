@@ -2,7 +2,8 @@
 #include "ReadFile.cpp"
 #include "HeaderParser.cpp"
 #include "HTTP2Frame.cpp"
-#include "HTTP2ConnectionSettings.hpp"
+#include "HTTP2Stream.hpp"
+#include "HTTP2Connection.hpp"
 
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
@@ -16,8 +17,7 @@ ServerLib::ServerLib(int port) : port(port) {
       
       std::cout << header.getHeaderline("upgrade") << std::endl;
       
-      //if (forceHTTP2 || header.getHeaderline("upgrade").compare("h2c")) {
-      if (header.getHeaderline("upgrade").compare("h2c")) {
+      if (header.getHeaderline("upgrade").compare("h2c") == 0) {
           //Upgrade connection to HTTP2(h2c)
           handleHTTP2Request(socket, buffer);
       } else {
@@ -84,6 +84,8 @@ int ServerLib::handleRequest() {
 
 int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
     
+    //HTTP2Connection connection(socket, buffer);
+    
     string upgradeHeader = "HTTP/1.1 101 Switching Protocols \r\n";
     upgradeHeader.append("Connection: Upgrade\r\n");
     upgradeHeader.append("Upgrade: h2c \r\n\r\n");
@@ -126,19 +128,30 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
             //Handle received frames
             for (auto frame: receivedFrames) {
                 auto streamID = frame.getStreamIdentifier();
-                if (frame.getLength() > 0 && (frame.getFlags() & 0x01) == 1) {
-                    connectionError(socket, lastOKIdentifier);
-                    terminate = 1;
-                    std::cout << "Payload length > 0, but ACK is set. TCP terminated." << std::endl;
-                }
+                
+                std::cout << "Frame with stream id " << streamID << " proccessed." << std::endl;
+                
                 switch (frame.getType()) {
                 // Use inheritance for frame types?
                 case 0:
                     std::cout << "Received DATA frame" << std::endl;
                     break;
-                case 1:
+                case 1: {
                     std::cout << "Received HEADERS frame" << std::endl;
+                    
+                    //Sending data frame start
+                    HTTP2Frame dataFrame;
+                    
+                    dataFrame.setType(0);
+                    dataFrame.setFlags(0x01);
+                    dataFrame.setStreamIdentifier(11);
+                    std::string pay("Test");
+                    dataFrame.setPayload(pay.c_str(), 4);
+                    dataFrame.sendFrame(socket);
+                    //Sending data frame end
+                    
                     break;
+                }
                 case 2:
                     std::cout << "Received PRIORITY frame" << std::endl;
                     break;
@@ -155,9 +168,16 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
                      * SETTINGS_MAX_HEADER_LIST_SIZE (0x6)
                      */
                     std::cout << "Received SETTINGS frame" << std::endl;
+                    if (frame.getLength() > 0 && (frame.getFlags() & 0x01) == 1) {
+                        connectionError(socket, lastOKIdentifier);
+                        terminate = 1;
+                        std::cout << "Payload length > 0, but ACK is set. TCP terminated." << std::endl;
+                    }
+                    
+                    
                     if (frame.getFlags() != 0x01) {
                         
-                        HTTP2ConnectionSettings settings(frame.getPayload(), frame.getLength());// TODO how to get settings from frame?
+                        //Settings settings;// TODO how to get settings from frame?
                         
                         //Sending setting frame start
                         HTTP2Frame settingsACK;
@@ -167,6 +187,7 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
                         settingsACK.setStreamIdentifier(0);
                         settingsACK.sendFrame(socket);
                         //Sending setting frame end
+                        
                     }
                     break;
                 case 5:
@@ -207,14 +228,6 @@ int ServerLib::setDefaultResponse(std::string response) {
 void ServerLib::setDebug(bool debug) {
     debugFlag = debug;
 }
-
-/*void ServerLib::setForceHTTP2(bool forceHTTP2) {
-    this -> forceHTTP2 = forceHTTP2;
-}
-
-int ServerLib::findHeaderEnd(char buffer[1024]) {
-    return 0;
-}*/
 
 void ServerLib::connectionError(int socket, unsigned int lastOKID) {
     HTTP2Frame goAway;
