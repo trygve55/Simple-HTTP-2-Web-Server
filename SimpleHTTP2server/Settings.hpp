@@ -2,7 +2,7 @@
  * The settings supported by HTTP2, any other setting must give a connection error.
  * https://tools.ietf.org/html/rfc7540
  **/
-struct Settings {
+struct HTTP2ConnectionSettings {
   bool ENABLE_PUSH = 0;
   int HEADER_TABLE_SIZE = 4096,
       MAX_CONCURRENT_STREAMS = 100,
@@ -10,7 +10,9 @@ struct Settings {
       MAX_HEADER_LIST_SIZE = 16384,
       MAX_FRAME_SIZE = 0;
   
-  Settings(char *payload, size_t length) {
+  HTTP2ConnectionSettings() {}
+  
+  HTTP2ConnectionSettings(char *payload, unsigned int length) {
     
   }
 };

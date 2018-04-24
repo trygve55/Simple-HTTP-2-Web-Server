@@ -10,6 +10,8 @@ struct HTTP2ConnectionSettings {
       MAX_HEADER_LIST_SIZE = 16384,
       MAX_FRAME_SIZE = 0;
   
+  HTTP2ConnectionSettings () {}
+  
   HTTP2ConnectionSettings(char *payload, unsigned int length) {
     
   }
