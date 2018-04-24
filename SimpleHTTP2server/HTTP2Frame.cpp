@@ -97,7 +97,7 @@ std::string HTTP2Frame::debugFrame(char *frame) {
   return ss.str();
 }
 
-static std::vector<HTTP2Frame> bufferToFrames(const char buffer[], const int bufferSize) {
+std::vector<HTTP2Frame> HTTP2Frame::bufferToFrames(const char buffer[], const int bufferSize) {
   std::vector<HTTP2Frame> frames;
   int iterator = 0;
   unsigned int frameLength;
