@@ -9,7 +9,7 @@
 #include <chrono>
 #include <thread>
 #include <map>
-#include "Settings.hpp"
+#include "HTTP2ConnectionSettings.hpp"
 #include "HTTP2Stream.hpp"
 
 //using namespace std;
@@ -26,7 +26,7 @@ private:
   
   std::map<unsigned int, HTTP2Stream> streams;
   
-  Settings settings;
+  HTTP2ConnectionSettings settings;
   
 public:
   HTTP2Connection(int socket, char *buffer);

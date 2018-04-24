@@ -2,7 +2,7 @@
 #include "ReadFile.cpp"
 #include "HeaderParser.cpp"
 #include "HTTP2Frame.cpp"
-#include "Settings.hpp"
+#include "HTTP2ConnectionSettings.hpp"
 
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
@@ -157,7 +157,7 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
                     std::cout << "Received SETTINGS frame" << std::endl;
                     if (frame.getFlags() != 0x01) {
                         
-                        Settings settings(frame.getPayload());// TODO how to get settings from frame?
+                        HTTP2ConnectionSettings settings(frame.getPayload(), frame.getLength());// TODO how to get settings from frame?
                         
                         //Sending setting frame start
                         HTTP2Frame settingsACK;
