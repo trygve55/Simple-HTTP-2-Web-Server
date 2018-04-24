@@ -24,10 +24,11 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
     HTTP2Frame settingsFrame;
 
     settingsFrame.setType(4);
-    char payload[0];
-    settingsFrame.setPayload(payload, 0);
-    char frame[1024] = {0};
-    sendFrame(frame);
+    unsigned int payloadSize = 36;
+    char payload[payloadSize];
+    settings.buildPayload(payload, payloadSize);
+    settingsFrame.setPayload(payload, payloadSize);
+    sendFrame(settingsFrame);
     //Sending setting frame end
 
     //reads client upgrade header (MAGIC) start
@@ -143,6 +144,6 @@ void HTTP2Connection::connectionError(int socket, unsigned int lastOKID) {
 
 ssize_t HTTP2Connection::sendFrame(HTTP2Frame frame) {
     frame.getFrame(sendBuffer);
-    std::cout << "Sending frame: " << frame.debugFrame(sendBuffer)  << " Size: " << std::dec << frame.getSize() << std::endl;
+    std::cout << "Sending frame: " << frame.debugFrame(sendBuffer) << " Size: " << std::dec << frame.getSize() << std::endl;
     return write(socket, sendBuffer, frame.getSize());
 }

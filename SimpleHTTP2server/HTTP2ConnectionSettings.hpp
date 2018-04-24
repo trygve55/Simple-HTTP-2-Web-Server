@@ -25,5 +25,7 @@ public:
 
   HTTP2ConnectionSettings(char *payload, unsigned int length);
 
-  bool changeSettings(char *payload, unsigned int length);
+  bool setSettings(char *payload, unsigned int length);
+  
+  void buildPayload(char *payload, unsigned int length);
 };
