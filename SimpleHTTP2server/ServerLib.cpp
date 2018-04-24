@@ -177,7 +177,7 @@ int ServerLib::handleHTTP2Request(int socket, char buffer[1024]) {
                     
                     if (frame.getFlags() != 0x01) {
                         
-                        //Settings settings;// TODO how to get settings from frame?
+                        HTTP2ConnectionSettings settings(frame.getPayload(), frame.getLength());// TODO how to get settings from frame?
                         
                         //Sending setting frame start
                         HTTP2Frame settingsACK;
