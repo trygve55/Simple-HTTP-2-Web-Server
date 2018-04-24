@@ -23,7 +23,21 @@ private:
   //char frame[1024]= {0};
   
 public:
-  HTTP2Frame();
+  static const struct Types {
+    static const short
+        DATA = 0,
+        HEADERS = 1,
+        PRIORITY = 2,
+        RST_STREAM = 3,
+        SETTINGS = 4,
+        PUSH_PROMISE = 5,
+        PING = 6,
+        GOAWAY = 7,
+        WINDOW_UPDATE = 8,
+        CONTINUATION = 9;
+  } FrameIDs;
+  
+  HTTP2Frame() {}
   HTTP2Frame(const char buffer[]);
   unsigned int const& getLength();
   void setPayload(char const payload[], unsigned int payloadSize);
