@@ -10,7 +10,7 @@ struct Settings {
       MAX_HEADER_LIST_SIZE = 16384,
       MAX_FRAME_SIZE = 0;
   
-  Settings(char *payload) {
+  Settings(char *payload, size_t length) {
     
   }
 };

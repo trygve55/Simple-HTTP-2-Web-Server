@@ -1,6 +1,5 @@
 #include "HTTP2Connection.hpp"
 #include "HTTP2Frame.cpp"
-#include "Settings.hpp"
 #include "HTTP2Stream.hpp"
 
 unsigned int HTTP2Connection::connectionIdIncrement = 0;
