@@ -1,19 +1,24 @@
 #include "HTTP2Connection.hpp"
-#include "HTTP2Frame.cpp"
+#include "HTTP2Frame.hpp"
 #include "HTTP2Stream.hpp"
 
 unsigned int HTTP2Connection::connectionIdIncrement = 0;
 
 HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
     connectionId = connectionIdIncrement++;
+    
+    this->socket = socket;
+    this->reciveBuffer = buffer;
+    this->sendBuffer = new char[1024];
+    this->concurrentStreams = 1;
 
+    //Switching to HTTP2(h2c) start
     std::string upgradeHeader = "HTTP/1.1 101 Switching Protocols \r\n";
     upgradeHeader.append("Connection: Upgrade\r\n");
     upgradeHeader.append("Upgrade: h2c \r\n\r\n");
-
     write(socket, upgradeHeader.c_str(), upgradeHeader.length());
-
     std::cout << "Upgraded connection to HTTP2(h2c)" << std::endl;
+    //Switching to HTTP2(h2c) end
 
     //Sending setting frame start
     HTTP2Frame settingsFrame;
@@ -27,9 +32,11 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
     write(socket, frame, settingsFrame.getSize());
     //Sending setting frame end
 
-    //reads client upgrade header
+    //reads client upgrade header (MAGIC) start
     read(socket, buffer, 24);
+    //reads client upgrade header (MAGIC) end
 
+    //reciveFrames start
     int bytesRead;
     unsigned int lastOKIdentifier = -1;
     bool terminate = 0;
@@ -42,7 +49,7 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
                 std::cout << std::hex << (int)buffer[i];
             std::cout << std::endl;
 
-            std::vector<HTTP2Frame> receivedFrames = bufferToFrames(buffer, bytesRead);
+            std::vector<HTTP2Frame> receivedFrames = HTTP2Frame::bufferToFrames(buffer, bytesRead);
 
             std::cout << "Frames received: " << receivedFrames.size() << std::endl;
 
@@ -121,9 +128,8 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
                 lastOKIdentifier = streamID;
             }
         }
-        //std::cout << buffer << std::endl;
 
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
     //close(socket);
@@ -138,8 +144,7 @@ void HTTP2Connection::connectionError(int socket, unsigned int lastOKID) {
 }
 
 ssize_t HTTP2Connection::sendFrame(HTTP2Frame frame) {
-    char f[1024] = {0};
-    frame.getFrame(f);
-    std::cout << frame.debugFrame(f) << std::endl;
-    return write(socket, f, frame.getSize());
+    frame.getFrame(sendBuffer);
+    std::cout << "Sending frame: " << frame.debugFrame(sendBuffer)  << " Size: " << std::dec << frame.getSize() << std::endl;
+    return write(socket, sendBuffer, frame.getSize());
 }

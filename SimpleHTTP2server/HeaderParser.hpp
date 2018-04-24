@@ -1,4 +1,6 @@
-#include "Header.cpp"
+#pragma once
+
+#include "Header.hpp"
 #include <iostream>
 
 int findStringInCharArray(std::string string, char buffer[], size_t bufferSize);

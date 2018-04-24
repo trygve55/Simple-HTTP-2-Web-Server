@@ -1,9 +1,9 @@
 #include "ServerLib.hpp"
-#include "ReadFile.cpp"
-#include "HeaderParser.cpp"
+#include "ReadFile.hpp"
+#include "HeaderParser.hpp"
 #include "HTTP2Frame.hpp"
-#include "HTTP2Stream.cpp"
-#include "HTTP2Connection.cpp"
+#include "HTTP2Stream.hpp"
+#include "HTTP2Connection.hpp"
 
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
@@ -22,9 +22,21 @@ ServerLib::ServerLib(int port) : port(port) {
           HTTP2Connection connection(socket, buffer);
       } else {
           //Respond as HTTP 1.1
-          string html = read_htmlfile("www/test.html");
-          write(socket, html.c_str(), html.length());
-          std::cout << "Response sent" << std::endl;
+          stringstream responseStream, bodyStream;
+          size_t fSize;
+          
+          if (fSize = read_htmlfile(bodyStream, "www/test.html") >= 0) {
+              responseStream << "HTTP/2.0 200 OK\r\nContent-length: " << fSize << "\r\n";
+              responseStream << "Content-Type: text/html\r\n\r\n";
+          } else {
+              responseStream << "HTTP/2.0 500 Internal Server Error";
+          }
+          
+          responseStream << bodyStream.rdbuf();
+          std::string response = responseStream.str();
+          
+          write(socket, response.c_str(), response.length());
+          std::cout << "Response sent"  << response << std::endl;
           
           close(socket);
       }

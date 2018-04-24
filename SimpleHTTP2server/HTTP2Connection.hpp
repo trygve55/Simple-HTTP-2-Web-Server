@@ -20,10 +20,9 @@ private:
   
   static unsigned int connectionIdIncrement;
   
-  unsigned int connectionId;
-  
+  unsigned int connectionId, concurrentStreams;
   int socket;
-  char *buffer;
+  char *reciveBuffer, *sendBuffer;
   
   std::map<unsigned int, HTTP2Stream> streams;
   

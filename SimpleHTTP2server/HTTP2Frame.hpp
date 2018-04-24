@@ -52,8 +52,8 @@ public:
   void emptyPayload() {length = 0;}
   
   std::string debugFrame(char *frame);
-};
 
 static std::vector<HTTP2Frame> bufferToFrames(const char buffer[], const int bufferSize);
+};
 
 #endif
