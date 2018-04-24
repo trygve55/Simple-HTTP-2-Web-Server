@@ -2,8 +2,8 @@
 #include "ReadFile.cpp"
 #include "HeaderParser.cpp"
 #include "HTTP2Frame.cpp"
-#include "HTTP2Stream.hpp"
-#include "HTTP2Connection.hpp"
+#include "HTTP2Stream.cpp"
+#include "HTTP2Connection.cpp"
 
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
