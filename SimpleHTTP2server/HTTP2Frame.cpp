@@ -1,9 +1,5 @@
 #include "HTTP2Frame.hpp"
 
-HTTP2Frame::HTTP2Frame() {
-  
-}
-
 HTTP2Frame::HTTP2Frame(const char buffer[]) {
   length += buffer[0] << 16;
   length += buffer[1] << 8;

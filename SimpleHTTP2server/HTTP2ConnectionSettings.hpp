@@ -21,7 +21,7 @@ public:
       Max_Header_List_Size = 16384,
       Max_FRAME_Size = 0;
 
-  HTTP2ConnectionSettings();
+  HTTP2ConnectionSettings() {}
 
   HTTP2ConnectionSettings(char *payload, unsigned int length);
 

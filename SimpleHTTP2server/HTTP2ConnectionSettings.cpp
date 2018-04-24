@@ -5,17 +5,11 @@ HTTP2ConnectionSettings::HTTP2ConnectionSettings(char *payload, unsigned int len
 }
 
 bool HTTP2ConnectionSettings::changeSettings(char *payload, unsigned int length) {
-  unsigned int iD, value;
-  for (unsigned int i = 0; i < length; i += 6) {
-    iD = 0;
-    value = 0;
+  for (unsigned int i = 0, iD, value; i < length; i += 6, iD = 0, value = 0) {
     iD += payload[i] << 8;
     iD += payload[i + 1];
     
-    value += payload[i + 2] << 24;
-    value += payload[i + 3] << 16;
-    value += payload[i + 4] << 8;
-    value += payload[i + 5];
+    for (unsigned int j = 2, b = 24; j <= 5; j++, b -= 8) {value += payload[i + j] << b;}
     
     switch (iD) {
     case TypeIDs.HEADER_TABLE_SIZE:
@@ -43,8 +37,6 @@ bool HTTP2ConnectionSettings::changeSettings(char *payload, unsigned int length)
       return false;
       break;
     }
-    return true;
   }
-  
-  
+  return true;
 }

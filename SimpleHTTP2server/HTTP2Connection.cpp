@@ -96,7 +96,7 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
 
                     if(frame.getFlags() != 0x01) {
 
-                        HTTP2ConnectionSettings settings(frame.getPayload(), frame.getLength()); // TODO how to get settings from frame?
+                        HTTP2ConnectionSettings settings(frame.getPayload(), frame.getLength());
 
                         //Sending setting frame start
                         HTTP2Frame settingsACK;

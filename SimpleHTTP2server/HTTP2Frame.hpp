@@ -35,7 +35,7 @@ public:
         CONTINUATION = 9;
   } FrameIDs;
   
-  HTTP2Frame();
+  HTTP2Frame() {}
   HTTP2Frame(const char buffer[]);
   unsigned int const& getLength();
   void setPayload(char const payload[], unsigned int payloadSize);
