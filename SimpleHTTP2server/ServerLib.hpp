@@ -36,7 +36,6 @@ public:
   int bindDir(std::string webDir, std::string diskDir);
   int setDefaultResponse(std::string response);
   void setDebug(bool debug);
-  void connectionError(int socket, unsigned int lastOKID);
   
   int parse_url(int string);
 };

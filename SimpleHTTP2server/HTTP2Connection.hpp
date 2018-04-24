@@ -28,6 +28,7 @@ private:
   
   HTTP2ConnectionSettings settings;
   
+  void connectionError(int socket, unsigned int lastOKID);
 public:
   HTTP2Connection(int socket, char *buffer);
   
