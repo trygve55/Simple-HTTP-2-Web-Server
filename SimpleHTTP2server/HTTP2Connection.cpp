@@ -54,10 +54,10 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
 
                 switch(frame.getType()) {
                 // Use inheritance for frame types?
-                case 0:
+                case HTTP2Frame::FrameIDs.DATA:
                     std::cout << "Received DATA frame" << std::endl;
                     break;
-                case 1: {
+                case HTTP2Frame::FrameIDs.HEADERS: {
                     std::cout << "Received HEADERS frame" << std::endl;
 
                     //Sending data frame start
@@ -73,28 +73,19 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
 
                     break;
                 }
-                case 2:
+                case HTTP2Frame::FrameIDs.PRIORITY:
                     std::cout << "Received PRIORITY frame" << std::endl;
                     break;
-                case 3:
+                case HTTP2Frame::FrameIDs.RST_STREAM:
                     std::cout << "Received RST_STREAM frame" << std::endl;
                     break;
-                case 4:
-                    /*
-                     * SETTINGS_HEADER_TABLE_SIZE (0x1)
-                     * SETTINGS_ENABLE_PUSH (0x2)
-                     * SETTINGS_MAX_CONCURRENT_STREAMS (0x3)
-                     * SETTINGS_INITIAL_WINDOW_SIZE (0x4)
-                     * SETTINGS_MAX_FRAME_SIZE (0x5)
-                     * SETTINGS_MAX_HEADER_LIST_SIZE (0x6)
-                     */
+                case HTTP2Frame::FrameIDs.SETTINGS:
                     std::cout << "Received SETTINGS frame" << std::endl;
                     if(frame.getLength() > 0 && (frame.getFlags() & 0x01) == 1) {
                         connectionError(socket, lastOKIdentifier);
                         terminate = 1;
                         std::cout << "Payload length > 0, but ACK is set. TCP terminated." << std::endl;
                     }
-
 
                     if(frame.getFlags() != 0x01) {
 
@@ -110,20 +101,20 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
                         //Sending setting frame end
                     }
                     break;
-                case 5:
+                case HTTP2Frame::FrameIDs.PUSH_PROMISE:
                     std::cout << "Received PUSH_PROMISE frame" << std::endl;
                     break;
-                case 6:
+                case HTTP2Frame::FrameIDs.PING:
                     std::cout << "Received PING frame" << std::endl;
                     break;
-                case 7:
+                case HTTP2Frame::FrameIDs.GOAWAY:
                     std::cout << "GOAWAY frame received. No new streams allowed." << std::endl;
                     terminate = 1;
                     break;
-                case 8:
+                case HTTP2Frame::FrameIDs.WINDOW_UPDATE:
                     std::cout << "Received WINDOW_UPDATE frame" << std::endl;
                     break;
-                case 9:
+                case HTTP2Frame::FrameIDs.CONTINUATION:
                     std::cout << "Received CONTINUATION frame" << std::endl;
                     break;
                 }

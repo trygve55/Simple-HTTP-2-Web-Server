@@ -2,26 +2,28 @@
  * The settings supported by HTTP2, any other setting must give a connection error.
  * https://tools.ietf.org/html/rfc7540
  **/
-struct HTTP2ConnectionSettings {
-  bool ENABLE_PUSH = 0;
-  int HEADER_TABLE_SIZE = 4096,
-      MAX_CONCURRENT_STREAMS = 100,
-      INITIAL_WINDOW_SIZE = 65535,
-      MAX_HEADER_LIST_SIZE = 16384,
-      MAX_FRAME_SIZE = 0;
-  
-  HTTP2ConnectionSettings () {}
-  
-  HTTP2ConnectionSettings(char *payload, unsigned int length) {
-    
-  }
-};
+class HTTP2ConnectionSettings {
+public:
+  static const struct Types {
+    static const short
+        HEADER_TABLE_SIZE = 1,
+        ENABLE_PUSH = 2,
+        MAX_CONCURRENT_STREAMS = 3,
+        INITIAL_WINDOW_SIZE = 4,
+        MAX_FRAME_SIZE = 5,
+        MAX_HEADER_LIST_SIZE = 6;
+  } TypeIDs;
 
-/*
-* SETTINGS_HEADER_TABLE_SIZE (0x1)
-* SETTINGS_ENABLE_PUSH (0x2)
-* SETTINGS_MAX_CONCURRENT_STREAMS (0x3)
-* SETTINGS_INITIAL_WINDOW_SIZE (0x4)
-* SETTINGS_MAX_FRAME_SIZE (0x5)
-* SETTINGS_MAX_HEADER_LIST_SIZE (0x6)
-*/
+  bool Enable_Push = 0;
+  int Header_Table_Size = 4096,
+      Max_Concurrent_Streams = 100,
+      Initial_Window_Size = 65535,
+      Max_Header_List_Size = 16384,
+      Max_FRAME_Size = 0;
+
+  HTTP2ConnectionSettings();
+
+  HTTP2ConnectionSettings(char *payload, unsigned int length);
+
+  bool changeSettings(char *payload, unsigned int length);
+};

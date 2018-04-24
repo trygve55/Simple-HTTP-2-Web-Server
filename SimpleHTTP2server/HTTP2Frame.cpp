@@ -34,18 +34,6 @@ void HTTP2Frame::setPayload(char const newPayload[], unsigned int payloadSize) {
 
 void HTTP2Frame::setType(uint8_t type) {
   this -> type = type;
-  
-  /* DATA frames (type=0x0)
-   * HEADERS frame (type=0x1)
-   * PRIORITY frame (type=0x2) 
-   * RST_STREAM frame (type=0x3)
-   * SETTINGS frame (type=0x4)
-   * PUSH_PROMISE frame (type=0x5)
-   * PING frame (type=0x6)
-   * GOAWAY frame (type=0x7)
-   * WINDOW_UPDATE frame (type=0x8)
-   * CONTINUATION frame (type=0x9)
-   * */
 }
 
 void HTTP2Frame::setFlags(uint8_t flags) {
