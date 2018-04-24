@@ -11,7 +11,8 @@ HTTP2Frame::HTTP2Frame(const char buffer[]) {
   streamIdentifier += buffer[6] << 16;
   streamIdentifier += buffer[7] << 8;
   streamIdentifier += buffer[8];
-  std::memcpy(&payload[0], &buffer[9], length);
+  //std::memcpy(&payload[0], &buffer[9], length);
+  for (unsigned int  i = 0; i < length;i++) payload[i] = buffer[9+i];
 }
 
 unsigned int const& HTTP2Frame::getLength() {
@@ -23,7 +24,8 @@ unsigned int HTTP2Frame::getSize() {
 }
 
 void HTTP2Frame::setPayload(char const newPayload[], unsigned int payloadSize) {
-  std::memcpy(&payload[0], &newPayload[9], length);
+  //std::memcpy(&payload[0], &newPayload[9], length);
+  for (unsigned int  i = 0; i < payloadSize;i++) payload[i] = newPayload[i];
   length = payloadSize;
   std::cout << "size: " << length << std::endl;
 }

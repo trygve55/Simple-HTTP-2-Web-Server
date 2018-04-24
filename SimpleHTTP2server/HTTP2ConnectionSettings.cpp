@@ -1,5 +1,7 @@
 #include "HTTP2ConnectionSettings.hpp"
 
+#include <iostream>
+
 HTTP2ConnectionSettings::HTTP2ConnectionSettings(char *payload, unsigned int length) {
   setSettings(payload, length);
 }
@@ -49,8 +51,9 @@ bool HTTP2ConnectionSettings::setSettings(char *payload, unsigned int length) {
   return true;
 }
 
-void HTTP2ConnectionSettings::buildPayload(char *payload, unsigned int length) {
-  int values[6] = {
+unsigned int HTTP2ConnectionSettings::buildPayload(char *payload) {
+  
+  unsigned int values[HTTP2ConnectionSettings::totalTypes] = {
       Header_Table_Size,
       Enable_Push,
       Max_Concurrent_Streams,
@@ -58,13 +61,16 @@ void HTTP2ConnectionSettings::buildPayload(char *payload, unsigned int length) {
       Max_Frame_Size,
       Max_Header_List_Size
   };
-  for (unsigned int n = 0; n < 6; n++) {// Correct?
-    for(unsigned int i = 0, iD = 1; i < length; i += 6, ++iD) {
-      payload[i] = (iD >> 8) & 0xFF;
-      payload[i + 1] = iD & 0xFF;
   
-      for(unsigned int j = 2, b = 24; j <= 5; j++, b -= 8) {payload[i + j] = (values[n] >> b) & 0xFF;}
-    }
+  for (unsigned int n = 0; n < HTTP2ConnectionSettings::totalTypes; n++) {  
+    payload[n*6] = ((n+1) >> 8) & 0xFF;
+    payload[n*6 + 1] = (n+1) & 0xFF;
+    payload[n*6 + 2] = (values[n] >> 24) & 0xFF;
+    payload[n*6 + 3] = (values[n] >> 16) & 0xFF;
+    payload[n*6 + 4] = (values[n] >> 8) & 0xFF;
+    payload[n*6 + 5] = (values[n]) & 0xFF;
   }
+  
+  return HTTP2ConnectionSettings::totalTypes*6;
 }
 

@@ -5,7 +5,7 @@
 class HTTP2ConnectionSettings {
 public:
   static const struct Types {
-    static const short
+    static const unsigned short
         HEADER_TABLE_SIZE = 1,
         ENABLE_PUSH = 2,
         MAX_CONCURRENT_STREAMS = 3,
@@ -13,9 +13,11 @@ public:
         MAX_FRAME_SIZE = 5,
         MAX_HEADER_LIST_SIZE = 6;
   } TypeIDs;
+  
+  static const unsigned short totalTypes = 6;
 
   bool Enable_Push = 0;
-  int Header_Table_Size = 4096,
+  unsigned int Header_Table_Size = 4096,
       Max_Concurrent_Streams = 100,
       Initial_Window_Size = 65535,
       Max_Frame_Size = 16384,
@@ -27,5 +29,5 @@ public:
 
   bool setSettings(char *payload, unsigned int length);
   
-  void buildPayload(char *payload, unsigned int length);
+  unsigned int buildPayload(char *payload);
 };

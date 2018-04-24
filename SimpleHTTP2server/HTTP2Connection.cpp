@@ -26,7 +26,10 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
     settingsFrame.setType(4);
     unsigned int payloadSize = 36;
     char payload[payloadSize];
-    settings.buildPayload(payload, payloadSize);
+    payloadSize = settings.buildPayload(payload);
+    for(int i = 0; i < payloadSize; ++i)
+        std::cout << std::hex << (int)payload[i];
+    std::cout << std::endl;
     settingsFrame.setPayload(payload, payloadSize);
     sendFrame(settingsFrame);
     //Sending setting frame end
@@ -181,6 +184,12 @@ void HTTP2Connection::connectionError(int socket, unsigned int lastOKID) {
 
 ssize_t HTTP2Connection::sendFrame(HTTP2Frame frame) {
     frame.getFrame(sendBuffer);
+    for(int i = 0; i < frame.getLength(); ++i)
+        std::cout << std::hex << (int)frame.getPayload()[i];
+    std::cout << std::endl;
+    for(int i = 0; i < frame.getSize(); ++i)
+        std::cout << std::hex << (int)sendBuffer[i];
+    std::cout << std::endl;
     std::cout << "Sending frame: " << frame.debugFrame(sendBuffer) << " Size: " << std::dec << frame.getSize() << std::endl;
     return write(socket, sendBuffer, frame.getSize());
 }
