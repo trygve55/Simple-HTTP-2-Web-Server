@@ -11,6 +11,7 @@
 #include <functional>
 #include <chrono>
 #include <sstream>
+#include "BufferSize.hpp"
 
 //using namespace std;
 
@@ -27,7 +28,7 @@ private:
   std::string defaultResponse = "";
   
   int handleRequest();
-  int handleHTTP2Request(int new_Socket, char buffer[1024]);
+  int handleHTTP2Request(int new_Socket, char buffer[BUFFERSIZE]);
   
 public:
   std::function<int(int socket, std::string *res)> thread_action;

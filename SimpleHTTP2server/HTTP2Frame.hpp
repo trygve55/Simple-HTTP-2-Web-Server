@@ -9,6 +9,7 @@
 #include <vector>
 #include <cstdint>
 #include <cstring>
+#include "BufferSize.hpp"
 
 //using namespace std;
 
@@ -17,14 +18,14 @@ private:
   uint8_t type = 0;
   uint8_t flags = 0;
   bool reserved = false;
-  unsigned int streamIdentifier = 0; 
-  char payload[1024] = {0};
+  int streamIdentifier = 0; 
+  char payload[BUFFERSIZE] = {0};
   unsigned int length = 0;
   //char frame[1024]= {0};
   
 public:
   static const struct Types {
-    static const short
+    static const uint8_t
         DATA = 0,
         HEADERS = 1,
         PRIORITY = 2,
@@ -45,10 +46,11 @@ public:
   unsigned int getSize();
   void setType(uint8_t type);
   void setFlags(uint8_t flags);
-  void setStreamIdentifier(unsigned int newStreamIdentifier);
+  void setStreamIdentifier(int newStreamIdentifier);
   uint8_t const& getType();
   uint8_t const& getFlags();
-  unsigned int const& getStreamIdentifier();
+  bool getFlag(unsigned int place);
+  int const& getStreamIdentifier();
   void getFrame(char *frame);
   //ssize_t sendFrame(int socket);
   void emptyPayload() {length = 0;}

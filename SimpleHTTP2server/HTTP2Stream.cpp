@@ -1,6 +1,6 @@
 #include "HTTP2Stream.hpp"
 
-HTTP2Stream::HTTP2Stream(const unsigned int streamIdentifier) {
+HTTP2Stream::HTTP2Stream(const int streamIdentifier) {
   this -> streamIdentifier = streamIdentifier;
 }
 
@@ -23,4 +23,12 @@ void HTTP2Stream::setState(const unsigned int newState) {
 
 unsigned int HTTP2Stream::getStage() {
   return state;
+}
+
+void HTTP2Stream::setStreamIdentifier(const int streamIdentifier) {
+  this -> streamIdentifier = streamIdentifier;
+}
+
+int HTTP2Stream::getStreamIdentifier() {
+  return streamIdentifier;
 }

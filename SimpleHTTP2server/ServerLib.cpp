@@ -8,10 +8,10 @@
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
   thread_action = [this](int socket, std::string *res) {
-      char buffer[1024] = {0};
+      char buffer[BUFFERSIZE] = {0};
       std::cout << "Client Connected" << std::endl;
         
-      read(socket, buffer, 1024);
+      read(socket, buffer, BUFFERSIZE);
       
       Header header = ParseHeader(buffer);
       

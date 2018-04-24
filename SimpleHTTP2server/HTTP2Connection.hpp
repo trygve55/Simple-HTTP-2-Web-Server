@@ -12,6 +12,7 @@
 #include "HTTP2ConnectionSettings.hpp"
 #include "HTTP2Stream.hpp"
 #include "HTTP2Frame.hpp"
+#include "BufferSize.hpp"
 
 //using namespace std;
 
@@ -29,12 +30,14 @@ private:
   HTTP2ConnectionSettings settings;
   
   void connectionError(int socket, unsigned int lastOKID);
+  ssize_t sendFrame(HTTP2Frame frame);
+  void setStreamState(int streamIdentifier, unsigned int state);
+  HTTP2Stream getStream(int streamIdentifier);
 public:
   HTTP2Connection(int socket, char *buffer);
   
   unsigned int getConnectionId();
   
-  ssize_t sendFrame(HTTP2Frame frame);
 };
 
 #endif
