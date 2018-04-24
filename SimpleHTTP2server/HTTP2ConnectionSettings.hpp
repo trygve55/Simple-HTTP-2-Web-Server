@@ -18,8 +18,8 @@ public:
   int Header_Table_Size = 4096,
       Max_Concurrent_Streams = 100,
       Initial_Window_Size = 65535,
-      Max_Header_List_Size = 16384,
-      Max_FRAME_Size = 0;
+      Max_Frame_Size = 16384,
+      Max_Header_List_Size = 0;
 
   HTTP2ConnectionSettings() {}
 
