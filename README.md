@@ -1,10 +1,14 @@
 # Simple-HTTP-2-Web-Server
 
-This is a simple HTTP2(h2c) web server. It does not support TLS yet.
+This is a simple HTTP2(h2c) web server library for Linux.
+
+
+No support for TLS yet.
+No support for UDP communication.
 
 Functions:
 
-ServerLib(int port), Create a server object with port number "port". 
+ServerLib(int port), Create a server object with specified port number. 
 
 int startServer(); Binds the socket and starts the server.
 
