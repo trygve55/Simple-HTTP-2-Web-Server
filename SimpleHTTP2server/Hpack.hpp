@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "HpackStaticTable.hpp"
 
 class Hpack {
 private:

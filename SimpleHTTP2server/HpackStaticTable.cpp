@@ -1,6 +1,6 @@
 #include "HpackStaticTable.hpp"
 
-static const StaticTableLine static_table[61] = {
+const StaticTableLine StaticTable::static_table[61] = {
   StaticTableLine(1,":authority",""),
   StaticTableLine(2,":method","GET"),
   StaticTableLine(3,":method","POST"),

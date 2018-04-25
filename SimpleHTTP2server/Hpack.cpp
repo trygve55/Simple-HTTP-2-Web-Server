@@ -1,5 +1,4 @@
 #include "Hpack.hpp"
-#include "HpackStaticTable.hpp"
 
 Hpack::Hpack() {}
 
