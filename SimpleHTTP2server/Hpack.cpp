@@ -19,11 +19,10 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
     if ((receivedPayload[iterator] & 0x80) >> 7) {
       unsigned int index = receivedPayload[iterator++] & 0x7F;
       
-      //code here pls
       StaticTableLine line = StaticTable::static_table[index - 1];
       header.setHeaderline(line.header_name, line.header_value);
       
-      std::cout << std::endl << "Indexed Header Field Representation, index: " << index << ", at: "  << std::dec << iterator << ", binary: ";
+      std::cout << std::endl << "Indexed Header Field Representation, index: " << index << ", at: "  << std::dec << iterator;
     }
     
     //Literal Header Field with Incremental Indexing
@@ -35,13 +34,15 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
       char * stringData = &receivedPayload[iterator];
       iterator += nameLength;
       
-      std::cout << std::endl << "Literal Header Field with Incremental Indexing, index: " << index << ", at: "  << std::dec << iterator - nameLength << ", length: " << nameLength << ", binary: ";
+      std::cout << std::endl << "Literal Header Field with Incremental Indexing, index: " << index << ", at: " << std::dec << iterator - nameLength << ", length: " << nameLength << ", huffman: " << huffman << ", binary: ";
       for (size_t j = 0; j < nameLength;j++) {
         std::cout << std::hex << ((int)stringData[j] & 0x0F);
       }
-      if (huffman) {
-        //Huffman::decode(stringData, nameLength);
-      }
+      
+      std::string valueString(handeBinary(stringData, nameLength, huffman));
+      header.setHeaderline(StaticTable::static_table[index - 1].header_name, valueString);
+      
+      std::cout << ", name: " << valueString;
     }
     
     //Literal Header Field without Indexing
@@ -53,13 +54,15 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
       char * stringData = &receivedPayload[iterator];
       iterator += nameLength;
       
-      std::cout << std::endl << "Literal Header Field without Indexing: " << index << ", at: "  << std::dec << iterator  - nameLength << ", binary: ";
+      std::cout << std::endl << "Literal Header Field without Indexing: " << index << ", at: "  << std::dec << iterator  - nameLength << ", length: " << nameLength << ", huffman: " << huffman << ", binary: ";
       for (size_t j = 0; j < nameLength;j++) {
         std::cout << std::hex << ((int)stringData[j] & 0x0F);
       }
-      if (huffman) {
-        //Huffman::decode(stringData, nameLength);
-      }
+      
+      std::string valueString(handeBinary(stringData, nameLength, huffman));
+      header.setHeaderline(StaticTable::static_table[index - 1].header_name, valueString);
+      
+      std::cout << ", name: " << valueString;
     }
     
     //Literal Header Field Never Indexed
@@ -71,7 +74,7 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
       char *stringData = &receivedPayload[iterator];
       iterator += nameLength;
       
-      std::cout << std::endl << "Literal Header Field Never Indexed, index: " << index << ", at: "  << std::dec << iterator - nameLength << ", binary: ";
+      std::cout << std::endl << "Literal Header Field Never Indexed, index: " << index << ", at: "  << std::dec << iterator - nameLength << ", length: " << nameLength << ", huffman: " << huffman << ", binary: ";
       
       for (size_t j = 0; j < nameLength;j++) {
         std::cout << std::hex << ((int)stringData[j] & 0x0F);
@@ -80,6 +83,10 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
         //Huffman::decode(stringData, nameLength);
       }
       
+      std::string valueString(handeBinary(stringData, nameLength, huffman));
+      header.setHeaderline(StaticTable::static_table[index - 1].header_name, valueString);
+      
+      std::cout << ", name: " << valueString;
     }
     
     //Dynamic Table Size Update
@@ -112,4 +119,10 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
   }
   
   return header;
+}
+
+std::string Hpack::handeBinary(char *buffer, unsigned int length, bool huffman) {
+  if (!huffman) return std::string(buffer, buffer + length);
+    
+  return "<undecoded>"; 
 }

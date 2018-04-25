@@ -209,7 +209,7 @@ void HTTP2Connection::proccessHeaderFrame(HTTP2Frame frame) {
     
     Header header = hpack.decodeHTTP2Header(&receivedPayload[iterator], frame.getLength() - iterator);
     
-    std::cout << std::endl << std::endl << "Decoded HTTP2 frame:" << std::endl << header.getHTTP();
+    std::cout << std::endl << std::endl << "Decoded HTTP2 frame:" << std::endl << header.getHTTP2_0();
     
     //Sending data frame start
     HTTP2Frame dataFrame;

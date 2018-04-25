@@ -29,7 +29,6 @@ std::string Header::getHTTP() {
   return ss.str();
 }
 
-/*
 std::string Header::getHTTP2_0() {
   std::stringstream ss;
   
@@ -42,7 +41,6 @@ std::string Header::getHTTP2_0() {
   
   return ss.str();
 }
-*/
 
 std::map<std::string, std::string> Header::getHeaderlines() {
   return headerlines;

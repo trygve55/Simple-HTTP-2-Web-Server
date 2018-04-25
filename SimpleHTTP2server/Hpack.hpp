@@ -18,7 +18,7 @@ public:
   
   Header decodeHTTP2Header(char *buffer, unsigned int length);
   
-  void huffman();
+  std::string handeBinary(char *buffer, unsigned int length, bool huffman);
 };
 
 #endif
