@@ -2,7 +2,7 @@
 #define HPACK_HPP
 
 #include <string>
-#include <map>
+#include <iostream>
 
 class Hpack {
 private:
@@ -13,7 +13,7 @@ public:
   
   Hpack();
   
-  
+  void decodeHeader(char *buffer, unsigned int length);
 };
 
 #endif

@@ -6,7 +6,7 @@ class HTTP2ConnectionSettings {
 public:
   static const struct Types {
     static const unsigned short
-        HEADER_TABLE_SIZE = 1,
+        HEADER_TABLE_SIZE = 0,
         ENABLE_PUSH = 2,
         MAX_CONCURRENT_STREAMS = 3,
         INITIAL_WINDOW_SIZE = 4,
