@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <map>
+#include <iostream>
 
 class Hpack {
 private:
@@ -14,7 +14,7 @@ public:
   
   Hpack();
   
-  void decode(std::string data);
+  void decodeHeader(char *buffer, unsigned int length);
   
 };
 

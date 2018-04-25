@@ -43,6 +43,7 @@ private:
   int socket, lastOkStreamIdentifier;
   char *reciveBuffer, *sendBuffer;
   WebBinder *webBinder;
+  Hpack hpack;
   
   std::map<unsigned int, HTTP2Stream> streams;
   
