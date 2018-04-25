@@ -13,6 +13,7 @@
 #include "HTTP2Stream.hpp"
 #include "HTTP2Frame.hpp"
 #include "BufferSize.hpp"
+#include "WebBinder.hpp"
 
 //using namespace std;
 
@@ -40,6 +41,7 @@ private:
   unsigned int connectionId, concurrentStreams;
   int socket, lastOkStreamIdentifier;
   char *reciveBuffer, *sendBuffer;
+  WebBinder *webBinder;
   
   std::map<unsigned int, HTTP2Stream> streams;
   
@@ -56,7 +58,7 @@ private:
   void proccessHeaderFrame(HTTP2Frame frame);
   
 public:
-  HTTP2Connection(int socket, char *buffer);
+  HTTP2Connection(int socket, char *buffer, WebBinder *webBinder);
   
   unsigned int getConnectionId();
   

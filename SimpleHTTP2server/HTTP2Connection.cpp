@@ -4,13 +4,14 @@
 
 unsigned int HTTP2Connection::connectionIdIncrement = 0;
 
-HTTP2Connection::HTTP2Connection(int socket, char *buffer) {
+HTTP2Connection::HTTP2Connection(int socket, char *buffer, WebBinder *webBinder) {
     connectionId = connectionIdIncrement++;
     
     this->socket = socket;
     this->reciveBuffer = buffer;
     this->sendBuffer = new char[BUFFERSIZE];
     this->concurrentStreams = 1;
+    this->webBinder = webBinder;
 
     //Switching to HTTP2(h2c) start
     std::string upgradeHeader = "HTTP/1.1 101 Switching Protocols \r\n";

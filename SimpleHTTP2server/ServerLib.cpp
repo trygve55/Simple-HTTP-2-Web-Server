@@ -19,7 +19,7 @@ ServerLib::ServerLib(int port) : port(port) {
       
       if (header.getHeaderline("upgrade").compare("h2c") == 0) {
           //Upgrade connection to HTTP2(h2c)
-          HTTP2Connection connection(socket, buffer);
+          HTTP2Connection connection(socket, buffer, &webBinder);
       } else {
           //Respond as HTTP 1.1
           stringstream responseStream, bodyStream;

@@ -31,16 +31,14 @@ private:
   int handleRequest();
   int handleHTTP2Request(int new_Socket, char buffer[BUFFERSIZE]);
   
-public:
   std::function<int(int socket)> thread_action;
+public:
   ServerLib(int port);
   
   int startServer();
   int webBind(std::string webDir, std::string diskDir);
   int webUnbind(std::string webDir);
   void setDebug(bool debug);
-  
-  int parse_url(int string);
 };
 
 #endif
