@@ -17,6 +17,7 @@ public:
   
   void decodeHeader(char *buffer, unsigned int length);
   
+  void huffman();
 };
 
 #endif

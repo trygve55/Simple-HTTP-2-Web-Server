@@ -29,6 +29,9 @@ SET(HEADERS
   SimpleHTTP2server/Hpack.hpp
   SimpleHTTP2server/ReadFile.hpp
   SimpleHTTP2server/HpackStaticTable.hpp
+  SimpleHTTP2server/Huffman.hpp
+  SimpleHTTP2server/HuffmanNode.hpp
+  SimpleHTTP2server/HuffmanBitString.hpp
 )
 
 add_library(SimpleHTTP2server ${SOURCE} ${HEADERS} )
