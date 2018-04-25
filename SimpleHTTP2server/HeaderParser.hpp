@@ -10,11 +10,11 @@ Header ParseHeader(char buffer[]) {
   std::string headerString(inString.substr(0, inString.find("\r\n\r\n")));
   
   size_t next = headerString.find(" "), iterator = 0;
-  headerObject.setMethod(headerString.substr(iterator, next - iterator));
+  headerObject.setHeaderline(":method", headerString.substr(iterator, next - iterator));
   iterator = next + 1, next = headerString.find(" ", iterator);
-  headerObject.setPath(headerString.substr(iterator, next - iterator));
+  headerObject.setHeaderline(":path", headerString.substr(iterator, next - iterator));
   iterator = next + 1, next = headerString.find("\r\n", iterator);
-  headerObject.setProtocol(headerString.substr(iterator, next - iterator));
+  headerObject.setHeaderline(":protocol",headerString.substr(iterator, next - iterator));
   
   //std::cout << (int)headerObject.getMethod() << " " << headerObject.getPath() << " " << (int)headerObject.getProtocol() << std::endl;
   

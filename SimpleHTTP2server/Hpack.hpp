@@ -4,8 +4,9 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <string>
 #include "HpackStaticTable.hpp"
-
+#include "Header.hpp"
 class Hpack {
 private:
 
@@ -15,7 +16,7 @@ public:
   
   Hpack();
   
-  void decodeHeader(char *buffer, unsigned int length);
+  Header decodeHTTP2Header(char *buffer, unsigned int length);
   
   void huffman();
 };

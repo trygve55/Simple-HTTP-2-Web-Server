@@ -204,7 +204,7 @@ void HTTP2Connection::proccessHeaderFrame(HTTP2Frame frame) {
     //pointer = receivedPayload[iterator]
     //length = frame.length() - iterator
     
-    hpack.decodeHeader(&receivedPayload[iterator], frame.getLength() - iterator);
+    hpack.decodeHTTP2Header(&receivedPayload[iterator], frame.getLength() - iterator);
     
     while ( iterator < frame.getLength()) {
         //std::cout << std::hex << ((int)receivedPayload[iterator] & 0xFF);

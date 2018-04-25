@@ -23,8 +23,8 @@ ServerLib::ServerLib(int port) : port(port) {
       } else {
           //Respond as HTTP 1.1
           stringstream responseStream, bodyStream;
-          if (header.getPath().back() == '/') header.setPath(header.getPath() + "index.html");
-          std::string path = webBinder.getPath(header.getPath());
+          if (header.getHeaderline(":path").back() == '/') header.setHeaderline(":path", header.getHeaderline(":path") + "index.html");
+          std::string path = webBinder.getPath(header.getHeaderline(":path"));
           
           int fSize = ((true) ? read_htmlfile(bodyStream, path) : -1);
           
