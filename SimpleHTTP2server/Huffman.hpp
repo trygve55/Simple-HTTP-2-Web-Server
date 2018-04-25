@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <queue>
-#include <bitset>
+#include <iostream>
 #include <algorithm>
 #include "HuffmanNode.hpp"
 #include "HuffmanBitString.hpp"
@@ -22,7 +22,9 @@ public:
 };
 
 class Huffman {
+  
 private:
+  
   static int byteArrayToInt(uint8_t* b) {
     return (b[3] & 0xFF) |
            (b[2] & 0xFF) << 8 |
@@ -74,26 +76,16 @@ private:
   }
 
 public:
-  static int* getFreqTable(uint8_t inputBytes[], int length) {
-    int freq[256];
-
-    for(int i = 0; i < length; i++)
-      freq[(int)inputBytes[i] & 0xFF]++;
-
-    return freq;
-  }
+  
+  static const uint8_t freqTable[256];
 
   //Returns the root of a Huffman tree made from the frequency table freq.
-  static HuffmanNode getHuffmanTree(int *freq, int length) {
+  static HuffmanNode getHuffmanTree() {
     std::priority_queue<int, std::vector<HuffmanNode>, Compare> nodes;
 
     for(unsigned int i = 0; i < 256; i++) {
-      if(freq[i] > 0)
-        nodes.emplace(HuffmanNode((uint8_t)i, freq[i], nullptr, nullptr));
-    }
-
-    if(length == 257) {
-      nodes.emplace(HuffmanNode((uint8_t)0, freq[256], nullptr, nullptr, true));
+      if(freqTable[i] > 0)
+        nodes.emplace(HuffmanNode((uint8_t)i, freqTable[i], nullptr, nullptr));
     }
 
     while(nodes.size() > 1) {
@@ -126,11 +118,9 @@ public:
     int maxFreq = 0, max2Freq = 1, freqBits = 0, outIterator = 0, valueOut;
     std::bitset<16> outData;
 
-    int* freq = getFreqTable(inputData, length);
-
     for(int i = 0; i < length; i++)
-      if(freq[i] > maxFreq)
-        maxFreq = freq[i];
+      if(freqTable[i] > maxFreq)
+        maxFreq = freqTable[i];
 
     while(maxFreq > max2Freq) {
       freqBits++;
@@ -147,7 +137,7 @@ public:
     }
 
     for(int i = 0; i < length; i++) {
-      valueOut = freq[i];
+      valueOut = freqTable[i];
 
       for(int j = 0; j < freqBits; j++) {
         if(valueOut % 2 == 1)
@@ -157,7 +147,7 @@ public:
       }
     }
 
-    std::vector<HuffmanBitString> huffmanBitStrings = getHuffmanStrings(getHuffmanTree(freq, length));
+    std::vector<HuffmanBitString> huffmanBitStrings = getHuffmanStrings(getHuffmanTree());
 
     HuffmanBitString* currentHuffmanBitString;
     const int bit_length = 16;
@@ -187,15 +177,18 @@ public:
   }
 
   //Returns the decoded bytes from inputData.
-  static uint8_t* decode(uint8_t inputData[], int length) {
+  static void decode(char *inputData, unsigned int length, std::vector<char> &outputData) {
 
-    std::bitset<32> bitSet;
+    std::cout << "test0" << std::endl;
+    std::vector<bool> bitSet;
     int j = 0;
-    for (uint8_t *i = inputData; i < i + length; i++, j++) {
-      bitSet[j] = *i;
+    for (unsigned int i = 0; i < length; i++) {
+      for (unsigned int j = 0; j < 8; j++) 
+        bitSet.emplace_back((inputData[i] >> (7 - j)) & 0x01);
     }
     int inIterator = 0, freqBits = 0, totalSize = 0;
 
+    std::cout << "test1" << std::endl;
     for(int i = 0; i < 8; i++) {
       if(bitSet[inIterator])
         freqBits += 1 << i;
@@ -205,6 +198,7 @@ public:
     int freq_length = 256;
     int freq[freq_length];
 
+    std::cout << "test2" << std::endl;
     for(int i = 0; i < freq_length; i++) {
       for(int j = 0; j < freqBits; j++) {
         if(bitSet[inIterator])
@@ -213,29 +207,39 @@ public:
       }
     }
 
+    std::cout << "test0" << std::endl;
     for(int i = 0; i < freq_length; i++)
       totalSize += freq[i];
 
-    HuffmanNode rootNode = getHuffmanTree(freq, freq_length);
+    std::cout << "test3" << std::endl;
+    HuffmanNode rootNode = getHuffmanTree();
     HuffmanNode* currentNode;
 
-    uint8_t outputData[totalSize];
-
+    std::cout << "test4" << std::endl;
     for(int outIterator = 0; outIterator < totalSize; outIterator++) {
+      std::cout << "test4.1 " << outIterator << std::endl;
       currentNode = &rootNode;
-      while(currentNode->getLeftNode() != nullptr) {
+      std::cout << "test4.2 " << outIterator << std::endl;
+      while(currentNode->getLeftNode()) {
+        std::cout << "test4.3 " << std::dec << outIterator << std::endl;
+        std::cout << currentNode -> toString();
         if(bitSet[inIterator]) {
+          std::cout << "test4.4.1 " << std::hex << (currentNode->getLeftNode()) << std::endl;
           currentNode = currentNode->getLeftNode();
         }
         else {
+          std::cout << "test4.4.2 "<< std::hex << (currentNode->getLeftNode())  << std::endl;
           currentNode = currentNode->getRightNode();
         }
         inIterator++;
       }
-      outputData[outIterator] = currentNode->getValue();
+      std::cout << "test4.5 "<< std::dec << outIterator << std::endl;
+      outputData.emplace_back(currentNode->getValue());
     }
-
-    return outputData;
+    
+    std::cout << "test5" << std::endl;
+    std::cout << "test6 "<< std::string(outputData.begin(), outputData.end());
+    //return outputData;
   }
 /*
   static uint8_t* adaptiveEncode(uint8_t[] inputData) {

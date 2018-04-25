@@ -1,9 +1,11 @@
 #include <stdint.h>
+#include <string>
+#include <sstream>
 
 class HuffmanNode {
 private:
   bool bit, newByte = false;
-  uint8_t value;
+  char value;
   int freq;
   HuffmanNode *leftNode, *rightNode;
 
@@ -21,7 +23,7 @@ public:
     this->rightNode = rightNode;
   }
 
-  HuffmanNode(uint8_t value, int freq, HuffmanNode* leftNode, HuffmanNode* rightNode, bool newByte) {
+  HuffmanNode(char value, int freq, HuffmanNode* leftNode, HuffmanNode* rightNode, bool newByte) {
     this->value = value;
     this->freq = freq;
     this->leftNode = leftNode;
@@ -42,4 +44,10 @@ public:
   bool isNewByte() { return newByte; }
 
   void setBit(bool bit) { this->bit = bit; }
+  
+  std::string toString() {
+    std::stringstream ss;
+    ss << "this: " << this << ", value: " << getValue() << ", freq:" << freq << ", left node: "<< getLeftNode() << ", right node: " << getRightNode() << "\n";
+    return ss.str();
+  }
 };

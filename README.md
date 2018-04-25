@@ -31,6 +31,15 @@ Testing:
   Test the server with nghttp or similar programs. There is a shellscript (./serverTesting/get.sh) to run a
   HTTP2 get request to the server. You can test the HTTP1.1 portion of the server with curl or a web browser.
 
+Compiling:
+  $ git clone https://github.com/trygve55/Simple-HTTP-2-Web-Server
+  $ cd Simple-HTTP-2-Web-Server
+  $ mkdir build
+  $ cd build
+  $ cmake ..
+  $ make
+  $ ./webserver
+
 Usage of C++ Standard Library:
   Containers:
     <array>

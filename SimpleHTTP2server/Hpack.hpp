@@ -12,8 +12,6 @@ private:
 
   
 public:
-  
-  
   Hpack();
   
   Header decodeHTTP2Header(char *buffer, unsigned int length);
