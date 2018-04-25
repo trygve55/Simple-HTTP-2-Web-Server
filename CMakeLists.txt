@@ -14,6 +14,7 @@ SET(SOURCE
   SimpleHTTP2server/HTTP2Frame.cpp
   SimpleHTTP2server/HTTP2Stream.cpp
   SimpleHTTP2server/WebBinder.cpp
+  SimpleHTTP2server/Hpack.cpp
 )
 SET(HEADERS
   SimpleHTTP2server/ServerLib.hpp
@@ -24,6 +25,7 @@ SET(HEADERS
   SimpleHTTP2server/HTTP2Frame.hpp
   SimpleHTTP2server/HTTP2Stream.hpp
   SimpleHTTP2server/WebBinder.hpp
+  SimpleHTTP2server/Hpack.hpp
   SimpleHTTP2server/ReadFile.hpp
 )
 

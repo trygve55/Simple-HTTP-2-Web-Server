@@ -14,6 +14,7 @@
 #include "HTTP2Frame.hpp"
 #include "BufferSize.hpp"
 #include "WebBinder.hpp"
+#include "Hpack.hpp"
 
 //using namespace std;
 
