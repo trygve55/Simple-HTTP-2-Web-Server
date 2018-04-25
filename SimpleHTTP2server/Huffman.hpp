@@ -15,9 +15,9 @@ class Compare {
   bool reverse;
 public:
   Compare(const bool& revparam = false) {reverse=revparam;}
-  bool operator() (const int& lhs, const int&rhs) const {
-    if (reverse) return (lhs > rhs);
-    else return (lhs < rhs);
+  bool operator() (HuffmanNode &lhs, HuffmanNode &rhs) const {
+    if (reverse) return (lhs.getFreq() > rhs.getFreq());
+    else return (lhs.getFreq() < rhs.getFreq());
   }
 };
 
@@ -62,14 +62,14 @@ private:
       getStrings((*rootNode.getLeftNode()), bitSets, newBitSetLeft, depth + 1);
     }
     else {
-      bitSets.emplace_back(new HuffmanBitString((*rootNode.getLeftNode()).getValue(), newBitSetLeft, depth + 1, (*rootNode.getLeftNode()).isNewByte()));
+      bitSets.emplace_back(HuffmanBitString((*rootNode.getLeftNode()).getValue(), newBitSetLeft, depth + 1, (*rootNode.getLeftNode()).isNewByte()));
     }
 
     if((*rootNode.getRightNode()).getRightNode() != nullptr) {
       getStrings(*rootNode.getRightNode(), bitSets, newBitSetRight, depth + 1);
     }
     else {
-      bitSets.emplace_back(new HuffmanBitString((*rootNode.getRightNode()).getValue(), newBitSetRight, depth + 1, (*rootNode.getRightNode()).isNewByte()));
+      bitSets.emplace_back(HuffmanBitString((*rootNode.getRightNode()).getValue(), newBitSetRight, depth + 1, (*rootNode.getRightNode()).isNewByte()));
     }
   }
 
@@ -87,13 +87,13 @@ public:
   static HuffmanNode getHuffmanTree(int *freq, int length) {
     std::priority_queue<int, std::vector<HuffmanNode>, Compare> nodes;
 
-    for(int i = 0; i < 256; i++) {
+    for(unsigned int i = 0; i < 256; i++) {
       if(freq[i] > 0)
-        nodes.emplace(new HuffmanNode((uint8_t)i, freq[i], nullptr, nullptr));
+        nodes.emplace(HuffmanNode((uint8_t)i, freq[i], nullptr, nullptr));
     }
 
     if(length == 257) {
-      nodes.emplace(new HuffmanNode((uint8_t)0, freq[256], nullptr, nullptr, true));
+      nodes.emplace(HuffmanNode((uint8_t)0, freq[256], nullptr, nullptr, true));
     }
 
     while(nodes.size() > 1) {
@@ -102,7 +102,7 @@ public:
       HuffmanNode nodeRight = nodes.top();
       nodes.pop();
 
-      nodes.emplace(new HuffmanNode(nodeLeft.getFreq() + nodeRight.getFreq(), &nodeLeft, &nodeRight));
+      nodes.emplace(HuffmanNode(nodeLeft.getFreq() + nodeRight.getFreq(), &nodeLeft, &nodeRight));
     }
     HuffmanNode result = nodes.top();
     nodes.pop();
@@ -166,7 +166,7 @@ public:
     for(int i = 0; i < length; i++) {
       currentHuffmanBitString = nullptr;
 
-      for(int j = 0; j < huffmanBitStrings.size(); j++) {
+      for(unsigned int j = 0; j < huffmanBitStrings.size(); j++) {
         if(inputData[i] == huffmanBitStrings[j].getaByte()) {
           currentHuffmanBitString = &huffmanBitStrings[j];
           break;

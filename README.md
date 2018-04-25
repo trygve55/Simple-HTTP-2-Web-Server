@@ -56,3 +56,12 @@ Usage of C++ Standard Library:
   Thread support library:
     <thread>
     
+Documentation:
+  HTTP2 Specification:
+    Hypertext Transfer Protocol Version 2 (HTTP/2) - https://http2.github.io/http2-spec/
+    HPACK: Header Compression for HTTP/2 - https://http2.github.io/http2-spec/compression.html
+  
+  C++ specific:
+    https://stackoverflow.com
+    http://www.cplusplus.com
+    http://en.cppreference.com
