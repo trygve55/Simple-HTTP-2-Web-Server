@@ -20,13 +20,13 @@ void Header::setMethod(char method) {
 
 void Header::setMethod(std::string method) {
   if (method.compare("OPTIONS") == 0) this -> method = Methods.OPTIONS;
-  if (method.compare("GET") == 0) this -> method = Methods.GET;
-  if (method.compare("HEAD") == 0) this -> method = Methods.HEAD;
-  if (method.compare("POST") == 0) this -> method = Methods.POST;
-  if (method.compare("PUT") == 0) this -> method = Methods.PUT;
-  if (method.compare("DELETE") == 0) this -> method = Methods.DELETE;
-  if (method.compare("TRACE") == 0) this -> method = Methods.TRACE;
-  if (method.compare("CONNECT") == 0) this -> method = Methods.CONNECT;
+  else if (method.compare("GET") == 0) this -> method = Methods.GET;
+  else if (method.compare("HEAD") == 0) this -> method = Methods.HEAD;
+  else if (method.compare("POST") == 0) this -> method = Methods.POST;
+  else if (method.compare("PUT") == 0) this -> method = Methods.PUT;
+  else if (method.compare("DELETE") == 0) this -> method = Methods.DELETE;
+  else if (method.compare("TRACE") == 0) this -> method = Methods.TRACE;
+  else if (method.compare("CONNECT") == 0) this -> method = Methods.CONNECT;
   
 }
 

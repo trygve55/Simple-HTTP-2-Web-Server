@@ -1,10 +1,10 @@
 #include "Hpack.hpp"
 
-Hpack::Hpack() {
-  
-}
+Hpack::Hpack() {}
 
 void Hpack::decodeHeader(char *receivedPayload, unsigned int length) {
+  for (unsigned int i = 0; i < length;i++) {std::cout << std::hex << ((int)receivedPayload[i] & 0xFF);}
+  std::cout << std::endl;
   
   //prints out compressed header
   for (unsigned int i = 0; i < length;i++) {
@@ -17,11 +17,12 @@ void Hpack::decodeHeader(char *receivedPayload, unsigned int length) {
   
   while (iterator < length) {
     
-    std::cout << std::hex << ((int)receivedPayload[iterator] & 0xFF);
     //Indexed Header Field Representation
     if ((receivedPayload[iterator] & 0x80) >> 7) {
       unsigned int index = receivedPayload[iterator++] & 0x7F;
       
+      //code here pls
+      StaticTableLine line = StaticTable::static_table[index - 1];
       
       std::cout << std::endl << "Indexed Header Field Representation, index: " << index << ", at: "  << std::dec << iterator << std::endl;
     }
@@ -110,3 +111,31 @@ void Hpack::decodeHeader(char *receivedPayload, unsigned int length) {
     }
   }
 }
+
+/*
+  std::vector<std::string> dynamic = std::vector<std::string>(5);
+  
+  for (unsigned int i = 0; i < length; i+= 2) {
+    short s = receivedPayload[i], idx = receivedPayload[i + 1];
+    if ((s & 0xF) == 0x08 && idx <= 61 && idx > 0) {
+      StaticTableLine line = StaticTable::static_table[idx - 1];
+      if (line.header_name.length() == 0) {
+        // Empty
+      }
+      else {
+        // Exists
+      }
+    }
+  }
+  
+  //dynamic.emplace();
+}
+
+
+/*int decodeBits(uint8_t* bits, unsigned int bit_amount) {
+  unsigned int i = 0;
+  while (i >= bit_amount * bit_amount - 1) {
+    
+  }
+  return 0;
+}*/

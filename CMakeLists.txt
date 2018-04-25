@@ -15,6 +15,7 @@ SET(SOURCE
   SimpleHTTP2server/HTTP2Stream.cpp
   SimpleHTTP2server/WebBinder.cpp
   SimpleHTTP2server/Hpack.cpp
+  SimpleHTTP2server/HpackStaticTable.cpp
 )
 SET(HEADERS
   SimpleHTTP2server/ServerLib.hpp
@@ -27,6 +28,7 @@ SET(HEADERS
   SimpleHTTP2server/WebBinder.hpp
   SimpleHTTP2server/Hpack.hpp
   SimpleHTTP2server/ReadFile.hpp
+  SimpleHTTP2server/HpackStaticTable.hpp
 )
 
 add_library(SimpleHTTP2server ${SOURCE} ${HEADERS} )
