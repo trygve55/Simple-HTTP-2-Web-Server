@@ -1,4 +1,5 @@
 #include "Hpack.hpp"
+#include "Huffman.hpp"
 
 Hpack::Hpack() {}
 
@@ -45,6 +46,9 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
       for (size_t j = 0; j < nameLength;j++) {
         std::cout << std::hex << ((int)stringData[j] & 0x0F);
       }
+      if (huffman) {
+        //Huffman::decode(stringData, nameLength);
+      }
     }
     
     //Literal Header Field without Indexing
@@ -59,6 +63,9 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
       std::cout << std::endl << "Literal Header Field without Indexing: " << index << ", at: "  << std::dec << iterator  - nameLength << std::endl;
       for (size_t j = 0; j < nameLength;j++) {
         std::cout << std::hex << ((int)stringData[j] & 0x0F);
+      }
+      if (huffman) {
+        //Huffman::decode(stringData, nameLength);
       }
     }
     
@@ -75,6 +82,9 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
       
       for (size_t j = 0; j < nameLength;j++) {
         std::cout << std::hex << ((int)stringData[j] & 0x0F);
+      }
+      if (huffman) {
+        //Huffman::decode(stringData, nameLength);
       }
       
     }

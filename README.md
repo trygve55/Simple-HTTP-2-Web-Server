@@ -5,6 +5,7 @@ This is a simple HTTP2(h2c) web server library for Linux.
 
 No support for TLS yet.
 No support for UDP communication.
+Huffman encoding is incomplete.
 
 Functions:
 
@@ -14,4 +15,4 @@ int startServer(); Binds the socket and starts the server.
 
 
 Testing:
-You can test the server with nghttp or similar programs. There is a shellscript (./serverTesting/get.sh) to run a HTTP2 get request to the server.
+Test the server with nghttp or similar programs. There is a shellscript (./serverTesting/get.sh) to run a HTTP2 get request to the server.

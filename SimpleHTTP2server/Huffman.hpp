@@ -23,19 +23,19 @@ public:
 
 class Huffman {
 private:
-  static int byteArrayToInt(int8_t* b) {
+  static int byteArrayToInt(uint8_t* b) {
     return (b[3] & 0xFF) |
            (b[2] & 0xFF) << 8 |
            (b[1] & 0xFF) << 16 |
            (b[0] & 0xFF) << 24;
   }
 
-  static int8_t *intToByteArray(int a) {
-    return new int8_t[4]{
-        (int8_t)((a >> 24) & 0xFF),
-        (int8_t)((a >> 16) & 0xFF),
-        (int8_t)((a >> 8) & 0xFF),
-        (int8_t)(a & 0xFF)};
+  static uint8_t *intToByteArray(int a) {
+    return new uint8_t[4]{
+        (uint8_t)((a >> 24) & 0xFF),
+        (uint8_t)((a >> 16) & 0xFF),
+        (uint8_t)((a >> 8) & 0xFF),
+        (uint8_t)(a & 0xFF)};
   }
 
   //Recursive help method of getHuffmanStrings(HuffmanNode rootNode).
@@ -74,7 +74,7 @@ private:
   }
 
 public:
-  static int* getFreqTable(int8_t inputBytes[], int length) {
+  static int* getFreqTable(uint8_t inputBytes[], int length) {
     int freq[256];
 
     for(int i = 0; i < length; i++)
@@ -89,11 +89,11 @@ public:
 
     for(int i = 0; i < 256; i++) {
       if(freq[i] > 0)
-        nodes.emplace(new HuffmanNode((int8_t)i, freq[i], nullptr, nullptr));
+        nodes.emplace(new HuffmanNode((uint8_t)i, freq[i], nullptr, nullptr));
     }
 
     if(length == 257) {
-      nodes.emplace(new HuffmanNode((int8_t)0, freq[256], nullptr, nullptr, true));
+      nodes.emplace(new HuffmanNode((uint8_t)0, freq[256], nullptr, nullptr, true));
     }
 
     while(nodes.size() > 1) {
@@ -122,7 +122,7 @@ public:
   }
 
   //Returns the Huffman encoded bytes from inputData.
-  static int8_t* encode(int8_t inputData[], int length) {
+  static uint8_t* encode(uint8_t inputData[], int length) {
     int maxFreq = 0, max2Freq = 1, freqBits = 0, outIterator = 0, valueOut;
     std::bitset<16> outData;
 
@@ -181,17 +181,17 @@ public:
         outIterator++;
       }
     }
-    int8_t result[bit_length];
+    uint8_t result[bit_length];
     for (int i = 0; i < bit_length; i++) {result[i] = outData[i];}
     return result;
   }
 
   //Returns the decoded bytes from inputData.
-  static int8_t* decode(int8_t inputData[], int length) {
+  static uint8_t* decode(uint8_t inputData[], int length) {
 
     std::bitset<32> bitSet;
     int j = 0;
-    for (int8_t *i = inputData; i < i + length; i++, j++) {
+    for (uint8_t *i = inputData; i < i + length; i++, j++) {
       bitSet[j] = *i;
     }
     int inIterator = 0, freqBits = 0, totalSize = 0;
@@ -219,7 +219,7 @@ public:
     HuffmanNode rootNode = getHuffmanTree(freq, freq_length);
     HuffmanNode* currentNode;
 
-    int8_t outputData[totalSize];
+    uint8_t outputData[totalSize];
 
     for(int outIterator = 0; outIterator < totalSize; outIterator++) {
       currentNode = &rootNode;
@@ -238,7 +238,7 @@ public:
     return outputData;
   }
 /*
-  static int8_t* adaptiveEncode(int8_t[] inputData) {
+  static uint8_t* adaptiveEncode(uint8_t[] inputData) {
     int freq[] = new int[257];
     int outIterator = 0;
     BitSet outData = new BitSet(), bitSet;
@@ -310,7 +310,7 @@ public:
     return outData.toByteArray();
   }
 
-  static int8_t* adaptiveDecode(int8_t inputData[]) {
+  static uint8_t* adaptiveDecode(uint8_t inputData[]) {
     int freq[] = new int[257];
     int outIterator = 0, inputIterator = 0;
     BitSet inBitSet = BitSet.valueOf(inputData);
@@ -338,7 +338,7 @@ public:
 
     freq[value]++;
     rootNode = getHuffmanTree(freq);
-    outData.add((int8_t)value);
+    outData.add((uint8_t)value);
     System.out.println("added: " + value + " " + (char)value);
     List<HuffmanBitString> huffmanBitStrings = getHuffmanStrings(getHuffmanTree(freq));
     System.out.println(huffmanBitStrings);
@@ -373,7 +373,7 @@ public:
         freq[256]++;
         freq[value]++;
         rootNode = getHuffmanTree(freq);
-        outData.add((int8_t)value);
+        outData.add((uint8_t)value);
         huffmanBitStrings = getHuffmanStrings(getHuffmanTree(freq));
         System.out.println(huffmanBitStrings);
 
@@ -387,7 +387,7 @@ public:
       }
     }
 
-    int8_t out[] = new int8_t[outData.size()];
+    uint8_t out[] = new uint8_t[outData.size()];
     for(int i = 0; i < out.length; i++) {
       out[i] = outData.get(i);
     }
