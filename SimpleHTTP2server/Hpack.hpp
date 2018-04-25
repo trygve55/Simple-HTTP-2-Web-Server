@@ -2,6 +2,7 @@
 #define HPACK_HPP
 
 #include <string>
+#include <vector>
 #include <map>
 
 class Hpack {
@@ -13,6 +14,7 @@ public:
   
   Hpack();
   
+  void decode(std::string data);
   
 };
 

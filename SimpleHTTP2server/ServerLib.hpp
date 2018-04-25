@@ -13,6 +13,7 @@
 #include <sstream>
 #include "BufferSize.hpp"
 #include "WebBinder.hpp"
+#include "HTTP2ConnectionSettings.hpp"
 
 //using namespace std;
 
@@ -27,6 +28,7 @@ private:
   std::vector<std::string> url_options;
   
   WebBinder webBinder;
+  HTTP2ConnectionSettings server_settings;
   
   int handleRequest();
   int handleHTTP2Request(int new_Socket, char buffer[BUFFERSIZE]);
