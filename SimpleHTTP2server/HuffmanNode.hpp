@@ -6,24 +6,24 @@ class HuffmanNode {
 private:
   bool bit, newByte = false;
   char value;
-  int freq;
+  unsigned int freq;
   HuffmanNode *leftNode, *rightNode;
 
 public:
   //HuffmanNode() {}
   
-  HuffmanNode(uint8_t value, int freq, HuffmanNode* leftNode, HuffmanNode* rightNode) : value(value), freq(freq) {
+  HuffmanNode(char value, unsigned int freq, HuffmanNode* leftNode, HuffmanNode* rightNode) : value(value), freq(freq) {
     this->leftNode = leftNode;
     this->rightNode = rightNode;
   }
 
-  HuffmanNode(int freq, HuffmanNode* leftNode, HuffmanNode* rightNode) {
+  HuffmanNode(unsigned int freq, HuffmanNode* leftNode, HuffmanNode* rightNode) {
     this->freq = freq;
     this->leftNode = leftNode;
     this->rightNode = rightNode;
   }
 
-  HuffmanNode(char value, int freq, HuffmanNode* leftNode, HuffmanNode* rightNode, bool newByte) {
+  HuffmanNode(char value, unsigned int freq, HuffmanNode* leftNode, HuffmanNode* rightNode, bool newByte) {
     this->value = value;
     this->freq = freq;
     this->leftNode = leftNode;
@@ -31,9 +31,9 @@ public:
     this->newByte = newByte;
   }
 
-  uint8_t getValue() { return value; }
+  char getValue() { return value; }
 
-  int getFreq() { return freq; }
+  unsigned int getFreq() { return freq; }
 
   HuffmanNode* getLeftNode() { return leftNode; }
 
@@ -47,7 +47,7 @@ public:
   
   std::string toString() {
     std::stringstream ss;
-    ss << "this: " << this << ", value: " << getValue() << ", freq:" << freq << ", left node: "<< getLeftNode() << ", right node: " << getRightNode() << "\n";
+    ss << "this: " << this << ", value: " << getValue() << ", freq:" << std::dec <<  freq << ", left node: "<< getLeftNode() << ", right node: " << getRightNode() << "\n";
     return ss.str();
   }
 };

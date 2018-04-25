@@ -124,10 +124,10 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
 std::string Hpack::handeBinary(char *buffer, unsigned int length, bool huffman) {
   if (!huffman) return std::string(buffer, buffer + length);
     
-  std::vector<char> outData;
-  std::cout << std::string(outData.data(), outData.size()) << std::endl;
-  Huffman::decode(buffer, length, outData);
-  return std::string(outData.begin(), outData.end());
+  //std::vector<char> outData;
+  //std::cout << std::string(outData.data(), outData.size()) << std::endl;
+  //Huffman::decode(buffer, length, outData);
+  //return std::string(outData.begin(), outData.end());
   
-  //return "<undecoded>";
+  return "<undecoded>";
 }
