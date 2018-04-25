@@ -3,19 +3,22 @@
 #include "Header.hpp"
 #include <iostream>
 
-int findStringInCharArray(std::string string, char buffer[], size_t bufferSize);
-
 Header ParseHeader(char buffer[]) {
   Header headerObject;
   
-  std::string inString(buffer);
+  std::string inString(buffer), headerline, content;
   std::string headerString(inString.substr(0, inString.find("\r\n\r\n")));
   
-  int next = 0;
-  size_t iterator = headerString.find("\r\n");
-  std::string headerline, content;
+  size_t next = headerString.find(" "), iterator = 0;
+  headerObject.setMethod(headerString.substr(iterator, next - iterator));
+  iterator = next + 1, next = headerString.find(" ", iterator);
+  headerObject.setPath(headerString.substr(iterator, next - iterator));
+  iterator = next + 1, next = headerString.find("\r\n", iterator);
+  headerObject.setProtocol(headerString.substr(iterator, next - iterator));
   
-  std::cout << inString << std::endl;
+  //std::cout << (int)headerObject.getMethod() << " " << headerObject.getPath() << " " << (int)headerObject.getProtocol() << std::endl;
+  
+  //std::cout << inString << std::endl;
   
   while(iterator < headerString.length()) {
     next = headerString.find(":", iterator);
@@ -27,7 +30,7 @@ Header ParseHeader(char buffer[]) {
     
     headerObject.setHeaderline(headerline, content);
     
-    std::cout << "header: " << headerline << " content: " << content << std::endl;
+    //std::cout << "header: " << headerline << " content: " << content << std::endl;
   }
   
   return headerObject;
@@ -41,15 +44,7 @@ Header ParseHeader(std::string header) {
   return headerObject;
 }
 
-int findStringInCharArray(std::string string, char buffer[], size_t bufferSize) {
-    if (string.length() == 0) return -2;
-    if (string.length() > bufferSize) return -3;
+/*
+Header ParseHeader() {
     
-    for (size_t i = 0; i < bufferSize - string.length();i++) {
-        for (size_t j = 0; j < string.length();j++) {
-            if (string[j] != buffer[i + j]) break;
-            if (j == string.length() - 1) return i;
-        }
-    }
-    return -1;
-}
+} */

@@ -12,6 +12,7 @@
 #include <chrono>
 #include <sstream>
 #include "BufferSize.hpp"
+#include "WebBinder.hpp"
 
 //using namespace std;
 
@@ -25,18 +26,18 @@ private:
   bool debugFlag = false;
   std::vector<std::string> url_options;
   
-  std::string defaultResponse = "";
+  WebBinder webBinder;
   
   int handleRequest();
   int handleHTTP2Request(int new_Socket, char buffer[BUFFERSIZE]);
   
 public:
-  std::function<int(int socket, std::string *res)> thread_action;
+  std::function<int(int socket)> thread_action;
   ServerLib(int port);
   
   int startServer();
-  int bindDir(std::string webDir, std::string diskDir);
-  int setDefaultResponse(std::string response);
+  int webBind(std::string webDir, std::string diskDir);
+  int webUnbind(std::string webDir);
   void setDebug(bool debug);
   
   int parse_url(int string);

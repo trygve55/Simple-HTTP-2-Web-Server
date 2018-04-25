@@ -7,7 +7,7 @@
 
 ServerLib::ServerLib(int port) : port(port) {
   // Temporary
-  thread_action = [this](int socket, std::string *res) {
+  thread_action = [this](int socket) {
       char buffer[BUFFERSIZE] = {0};
       std::cout << "Client Connected" << std::endl;
         
@@ -23,13 +23,16 @@ ServerLib::ServerLib(int port) : port(port) {
       } else {
           //Respond as HTTP 1.1
           stringstream responseStream, bodyStream;
-          int fSize = read_htmlfile(bodyStream, "www/test.html");
+          if (header.getPath().back() == '/') header.setPath(header.getPath() + "index.html");
+          std::string path = webBinder.getPath(header.getPath());
+          
+          int fSize = ((true) ? read_htmlfile(bodyStream, path) : -1);
           
           if (fSize >= 0) {
               responseStream << "HTTP/1.1 200 OK\r\nContent-length: " << fSize << "\r\n";
               responseStream << "Content-Type: text/html\r\n\r\n";
           } else {
-              responseStream << "HTTP/1.1 500 Internal Server Error";
+              responseStream << "HTTP/1.1 404 Not Found";
           }
           
           responseStream << bodyStream.rdbuf();
@@ -88,16 +91,18 @@ int ServerLib::handleRequest() {
             return -1;
         }
 
-        std::thread (thread_action, new_socket, &defaultResponse).detach();// Execute the function upon connection.
+        std::thread (thread_action, new_socket).detach();// Execute the function upon connection.
       }
-    return 0;
-}
-
-int ServerLib::setDefaultResponse(std::string response) {
-    defaultResponse = response;
     return 0;
 }
 
 void ServerLib::setDebug(bool debug) {
     debugFlag = debug;
+}
+
+int ServerLib::webBind(std::string webDir, std::string diskDir) {
+    return webBinder.bind(webDir, diskDir);
+}
+int ServerLib::webUnbind(std::string webDir) {
+    return webBinder.unbind(webDir);
 }
