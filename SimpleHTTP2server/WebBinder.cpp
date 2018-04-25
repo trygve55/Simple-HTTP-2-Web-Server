@@ -4,7 +4,7 @@ WebBinder::WebBinder() {}
 
 int WebBinder::bind(std::string webDir, std::string diskDir) {
   
-  std::regex validateWeb("(\\/((\\w)*|\\*))*"), validateDisk("((\\w)+(\\/)?)*(\\.(\\w)+)?"), isFile("\\S*\\/");
+  std::regex validateWeb("(\\/((\\w)*|\\*))*"), validateDisk("(\\/)?((\\w)+(\\/)?)*(\\.(\\w)+)?"), isFile("\\S*\\/");
   
   if (!std::regex_match(webDir, validateWeb)) return -2;
   if (!std::regex_match(diskDir, validateDisk)) return -3;

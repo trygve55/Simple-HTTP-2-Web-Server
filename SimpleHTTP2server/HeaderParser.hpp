@@ -15,6 +15,7 @@ Header ParseHeader(char buffer[]) {
   headerObject.setHeaderline(":path", headerString.substr(iterator, next - iterator));
   iterator = next + 1, next = headerString.find("\r\n", iterator);
   headerObject.setHeaderline(":protocol",headerString.substr(iterator, next - iterator));
+  iterator = next;
   
   //std::cout << (int)headerObject.getMethod() << " " << headerObject.getPath() << " " << (int)headerObject.getProtocol() << std::endl;
   

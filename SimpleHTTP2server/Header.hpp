@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <sstream>
 
 //using namespace std;
 
@@ -15,8 +16,8 @@ public:
   Header();
   int setHeaderline(std::string headerline, std::string content);
   std::string getHeaderline(std::string headerline);
-  std::string getHTTP1_1();
-  std::string getHTTP2_0();
+  std::string getHTTP();
+  //std::string getHTTP2_0();
   std::map<std::string, std::string> getHeaderlines();
 };
 

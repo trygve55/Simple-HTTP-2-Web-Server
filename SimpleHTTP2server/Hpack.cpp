@@ -3,23 +3,16 @@
 Hpack::Hpack() {}
 
 Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
-  for (unsigned int i = 0; i < length;i++) {std::cout << std::hex << ((int)receivedPayload[i] & 0xFF);}
-  std::cout << std::endl;
-  
   Header header;
-  
-  //prints out compressed header
-  for (unsigned int i = 0; i < length;i++) {
-    
-    std::cout << std::hex << ((int)receivedPayload[i] & 0xFF);
-  }
-  std::cout << std::endl;
-  
   unsigned int iterator = 0;
   
+  //prints out compressed header start
+  std::cout << std::endl << "Header binary: ";
+  for (unsigned int i = 0; i < length;i++) {std::cout << std::hex << ((int)receivedPayload[i] & 0xFF);}
+  std::cout << std::endl;
+  //prints out compressed header end
+  
   while (iterator < length) {
-    
-    std::cout << iterator << std::endl;
     
     //Indexed Header Field Representation
     if ((receivedPayload[iterator] & 0x80) >> 7) {
@@ -29,7 +22,7 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
       StaticTableLine line = StaticTable::static_table[index - 1];
       header.setHeaderline(line.header_name, line.header_value);
       
-      std::cout << std::endl << "Indexed Header Field Representation, index: " << index << ", at: "  << std::dec << iterator << std::endl;
+      std::cout << std::endl << "Indexed Header Field Representation, index: " << index << ", at: "  << std::dec << iterator << ", binary: ";
     }
     
     //Literal Header Field with Incremental Indexing
@@ -41,7 +34,7 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
       char * stringData = &receivedPayload[iterator];
       iterator += nameLength;
       
-      std::cout << std::endl << "Literal Header Field with Incremental Indexing, index: " << index << ", at: "  << std::dec << iterator - nameLength << ", length: " << nameLength << std::endl;
+      std::cout << std::endl << "Literal Header Field with Incremental Indexing, index: " << index << ", at: "  << std::dec << iterator - nameLength << ", length: " << nameLength << ", binary: ";
       for (size_t j = 0; j < nameLength;j++) {
         std::cout << std::hex << ((int)stringData[j] & 0x0F);
       }
@@ -56,7 +49,7 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
       char * stringData = &receivedPayload[iterator];
       iterator += nameLength;
       
-      std::cout << std::endl << "Literal Header Field without Indexing: " << index << ", at: "  << std::dec << iterator  - nameLength << std::endl;
+      std::cout << std::endl << "Literal Header Field without Indexing: " << index << ", at: "  << std::dec << iterator  - nameLength << ", binary: ";
       for (size_t j = 0; j < nameLength;j++) {
         std::cout << std::hex << ((int)stringData[j] & 0x0F);
       }
@@ -71,7 +64,7 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
       char *stringData = &receivedPayload[iterator];
       iterator += nameLength;
       
-      std::cout << std::endl << "Literal Header Field Never Indexed, index: " << index << ", at: "  << std::dec << iterator - nameLength << std::endl;
+      std::cout << std::endl << "Literal Header Field Never Indexed, index: " << index << ", at: "  << std::dec << iterator - nameLength << ", binary: ";
       
       for (size_t j = 0; j < nameLength;j++) {
         std::cout << std::hex << ((int)stringData[j] & 0x0F);
@@ -81,22 +74,16 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
     
     //Dynamic Table Size Update
     else if ((receivedPayload[iterator] & 0xE0) == 0x20) {
-      std::cout << std::endl << "Size header at " << iterator  << " new " ;
-      
       unsigned int dynamicTableSizeUpdate = receivedPayload[iterator++] & 0x1F, m = 0;
       
       bool continuation = true;
       while (continuation) {
-        std::cout << std::hex << ((int)receivedPayload[iterator] & 0xFF);
-        
         dynamicTableSizeUpdate += (receivedPayload[iterator] & 0x7F) << m;
-        
         m += 7;
         continuation = (receivedPayload[iterator++] & 0x80) >> 7;
       }
       
-      
-      std::cout << " dynamicTableSizeUpdate: " << std::dec << dynamicTableSizeUpdate << std::endl;
+      std::cout << std::endl << "Dynamic Table Size Update, newSize: " << std::dec << dynamicTableSizeUpdate << ", at: "  << std::dec << iterator - 3;
       
       /*
       decode I from the next N bits
@@ -112,8 +99,6 @@ Header Hpack::decodeHTTP2Header(char *receivedPayload, unsigned int length) {
        */
       
     }
-    
-    std::cout << "iterator" << std::dec << iterator << std::endl;
   }
   
   return header;

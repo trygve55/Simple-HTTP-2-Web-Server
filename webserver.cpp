@@ -5,10 +5,10 @@
 int main() {
     ServerLib server(8080);
     
-    std::cout << server.webBind("/", "www/")<< std::endl;
-    std::cout << server.webBind("/test/", "www/")<< std::endl;
-    std::cout << server.webBind("/test/*/", "www/")<< std::endl;
-    std::cout << server.webBind("/hei", "www/test.html") << std::endl;
+    server.webBind("/", "www/");
+    server.webBind("/test/", "www/");
+    server.webBind("/test/*/", "www/");
+    server.webBind("/hei", "www/test.html");
     
     if (server.startServer() != 0) std::cout << "Error starting server." << std::endl;
     

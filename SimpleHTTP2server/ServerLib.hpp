@@ -13,6 +13,7 @@
 #include <sstream>
 #include "BufferSize.hpp"
 #include "WebBinder.hpp"
+#include <stdexcept>
 //#include "HTTP2ConnectionSettings.hpp"
 
 //using namespace std;

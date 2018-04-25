@@ -15,7 +15,9 @@ ServerLib::ServerLib(int port) : port(port) {
       
       Header header = ParseHeader(buffer);
       
-      std::cout << header.getHeaderline("upgrade") << std::endl;
+      //std::cout << header.getHTTP() << std::endl;
+      
+      //std::cout << header.getHeaderline("upgrade") << std::endl;
       
       if (header.getHeaderline("upgrade").compare("h2c") == 0) {
           //Upgrade connection to HTTP2(h2c)
@@ -101,7 +103,12 @@ void ServerLib::setDebug(bool debug) {
 }
 
 int ServerLib::webBind(std::string webDir, std::string diskDir) {
-    return webBinder.bind(webDir, diskDir);
+    int bind =  webBinder.bind(webDir, diskDir);
+    if (bind == -1) throw std::invalid_argument("Web binding exists.");
+    if (bind == -2) throw std::invalid_argument("Not a valid web path.");
+    if (bind == -3) throw std::invalid_argument("Not a valid disk path.");
+    if (bind == -4) throw std::invalid_argument("Not a valid combinaton of web and disk path.");
+    return bind;
 }
 int ServerLib::webUnbind(std::string webDir) {
     return webBinder.unbind(webDir);

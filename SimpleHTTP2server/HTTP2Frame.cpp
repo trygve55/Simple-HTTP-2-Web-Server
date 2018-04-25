@@ -27,7 +27,7 @@ void HTTP2Frame::setPayload(char const newPayload[], unsigned int payloadSize) {
   //std::memcpy(&payload[0], &newPayload[9], length);
   for (unsigned int  i = 0; i < payloadSize;i++) payload[i] = newPayload[i];
   length = payloadSize;
-  std::cout << "size: " << length << std::endl;
+  //std::cout << "size: " << length << std::endl;
 }
 
 void HTTP2Frame::setType(uint8_t type) {

@@ -171,11 +171,14 @@ void HTTP2Connection::proccessHeaderFrame(HTTP2Frame frame) {
     
     //Padded flag
     if (frame.getFlag(3)) {
+        std::cout << "Padded flag" << std::endl;
         padLength = receivedPayload[iterator++];
     }
     
     //Priority flag
     if (frame.getFlag(5)) {
+        std::cout << "Priority flag" << std::endl;
+        
         streamDependency = 0;
         streamDependencyExclusive = (receivedPayload[iterator] & 0x80) >> 7;
         streamDependency += (receivedPayload[iterator] << 24) & 0xE;
@@ -192,11 +195,11 @@ void HTTP2Connection::proccessHeaderFrame(HTTP2Frame frame) {
     }
     
     //End headers flag
-    if (frame.getFlag(2)) std::cout << "End headers" << std::endl;
+    if (frame.getFlag(2)) std::cout << "End header flag" << std::endl;
     
     //End stream flag
     if (frame.getFlag(0)) {
-        std::cout << "End stream" << std::endl;
+        std::cout << "End stream flag" << std::endl;
         setStreamState(streamDependency, 6);
     }
     
@@ -204,13 +207,9 @@ void HTTP2Connection::proccessHeaderFrame(HTTP2Frame frame) {
     //pointer = receivedPayload[iterator]
     //length = frame.length() - iterator
     
-    hpack.decodeHTTP2Header(&receivedPayload[iterator], frame.getLength() - iterator);
+    Header header = hpack.decodeHTTP2Header(&receivedPayload[iterator], frame.getLength() - iterator);
     
-    while ( iterator < frame.getLength()) {
-        //std::cout << std::hex << ((int)receivedPayload[iterator] & 0xFF);
-        iterator++;
-    }
-    //std::cout << std::endl;
+    std::cout << std::endl << std::endl << "Decoded HTTP2 frame:" << std::endl << header.getHTTP();
     
     //Sending data frame start
     HTTP2Frame dataFrame;
