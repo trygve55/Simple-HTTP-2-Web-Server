@@ -16,6 +16,7 @@ SET(SOURCE
   SimpleHTTP2server/HTTP2Stream.cpp
   SimpleHTTP2server/WebBinder.cpp
   SimpleHTTP2server/Hpack.cpp
+  SimpleHTTP2server/Huffman.cpp
   SimpleHTTP2server/HpackStaticTable.cpp
 )
 SET(HEADERS

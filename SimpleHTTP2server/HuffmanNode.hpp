@@ -7,42 +7,32 @@ class HuffmanNode {
 private:
   bool bit, newByte = false;
   char value;
-  int freq;
-  HuffmanNode *leftNode = nullptr, *rightNode = nullptr;
 
 public:
-  //HuffmanNode() {}
   
-  HuffmanNode(char value, int freq, HuffmanNode* leftNode, HuffmanNode* rightNode) {
+  HuffmanNode *leftNode = nullptr, *rightNode = nullptr;
+  
+  HuffmanNode() {}
+  
+  HuffmanNode(char value, HuffmanNode* leftNode, HuffmanNode* rightNode) {
     std::cout << "left: " << leftNode << " right: " << rightNode << std::endl;
     this->value = value;
-    this->freq = freq;
     this->leftNode = leftNode;
     this->rightNode = rightNode;
   }
-
-  HuffmanNode(int freq, HuffmanNode* leftNode, HuffmanNode* rightNode) {
-    std::cout << "left: " << leftNode << " right: " << rightNode << std::endl;
-    this->freq = freq;
-    this->leftNode = leftNode;
-    this->rightNode = rightNode;
-  }
-
-  HuffmanNode(char value, int freq, HuffmanNode* leftNode, HuffmanNode* rightNode, bool newByte) {
+  
+  HuffmanNode(char value) {
     std::cout << "left: " << leftNode << " right: " << rightNode << std::endl;
     this->value = value;
-    this->freq = freq;
+  }
+
+  HuffmanNode(HuffmanNode* leftNode, HuffmanNode* rightNode) {
+    std::cout << "left: " << leftNode << " right: " << rightNode << std::endl;
     this->leftNode = leftNode;
     this->rightNode = rightNode;
-    this->newByte = newByte;
   }
 
   char getValue() { return value; }
-
-  int getFreq() {
-    //std::cout << " freq  " << freq << std::endl;
-    return freq;
-  }
 
   HuffmanNode* getLeftNode() { return leftNode; }
 
@@ -56,7 +46,7 @@ public:
   
   std::string toString() {
     std::stringstream ss;
-    ss << "this: " << this << ", value: " << getValue() << ", freq:" << std::dec <<  freq << ", left node: "<< getLeftNode() << ", right node: " << getRightNode() << "\n";
+    ss << "this: " << this << ", value: " << getValue() << ", freq:" << ", left node: "<< getLeftNode() << ", right node: " << getRightNode() << "\n";
     return ss.str();
   }
 };
