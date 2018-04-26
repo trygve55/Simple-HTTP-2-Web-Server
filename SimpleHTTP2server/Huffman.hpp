@@ -15,15 +15,15 @@ class Compare {
   bool reverse;
 public:
   Compare(const bool& revparam = false) {reverse=revparam;}
-  bool operator() (HuffmanNode &lhs, HuffmanNode &rhs) const {
-    if (reverse) return (lhs.getFreq() > rhs.getFreq());
-    else return (lhs.getFreq() < rhs.getFreq());
+  bool operator() (HuffmanNode *lhs, HuffmanNode *rhs) const {
+    std::cout << "compare freq: " << lhs -> getFreq() << ", " << rhs -> getFreq() << ", c: " << lhs -> getFreq() - rhs -> getFreq() << std::endl;
+    return rhs -> getFreq() < lhs -> getFreq();
   }
 };
 
 class Huffman {
-static const uint8_t freqTable[256];
-  
+static unsigned int freqTable[];
+static unsigned int totalString;
   
 private:
   
@@ -43,44 +43,56 @@ private:
   }
 
   //Recursive help method of getHuffmanStrings(HuffmanNode rootNode).
-  static void getStrings(HuffmanNode rootNode, std::vector<HuffmanBitString> bitSets, std::bitset<16> bitSet, int depth) {
+  static void getStrings(HuffmanNode* rootNode, std::vector<HuffmanBitString> &bitSets, std::vector<bool> bitSet, int depth) {
 
-    std::bitset<16> newBitSetLeft;
-    std::bitset<16> newBitSetRight;
+    std::cout << "Depth" << depth << std::endl;
 
+    std::vector<bool> newBitSetLeft;
+    std::vector<bool> newBitSetRight;
+    
+    for(size_t i = 0; i < bitSet.size(); i++) {
+      std::cout << bitSet[i];
+    }
+    std::cout << std::endl;
+    
     for(int i = 0; i < depth; i++) {
-      if(bitSet[i]) {
-        newBitSetLeft.set(i);
-        newBitSetRight.set(i);
-      }
-      else {
-        newBitSetLeft.reset(i);
-        newBitSetRight.reset(i);
-      }
+      std::cout << "Depth" << depth << " test " << i << " " << bitSet.size() << std::endl;
+      newBitSetLeft.emplace_back(bitSet[i]);
+      newBitSetRight.emplace_back(bitSet[i]);
     }
+    
 
-    newBitSetLeft.set(depth);
-    newBitSetRight.reset(depth);
+    newBitSetLeft.emplace_back(true);
+    newBitSetRight.emplace_back(false);
+    
+    std::cout << "test2 " << rootNode -> getLeftNode() -> getLeftNode() << std::endl;
 
-    if((*rootNode.getLeftNode()).getLeftNode() != nullptr) {
-      getStrings((*rootNode.getLeftNode()), bitSets, newBitSetLeft, depth + 1);
+    std::cout << "test2.1" << rootNode -> getLeftNode() << (unsigned long)nullptr;
+    if(rootNode -> getLeftNode() -> getLeftNode() != nullptr) {
+      std::cout << " Depth " << depth << " left " << rootNode -> getLeftNode() <<std::endl;
+      getStrings(rootNode -> getLeftNode(), bitSets, newBitSetLeft, depth + 1);
+      std::cout <<"test4.1" << std::endl;
     }
     else {
-      bitSets.emplace_back(HuffmanBitString((*rootNode.getLeftNode()).getValue(), newBitSetLeft, depth + 1, (*rootNode.getLeftNode()).isNewByte()));
+      std::cout <<" test3.1" <<std::endl;
+      bitSets.emplace_back((*rootNode -> getLeftNode()).getValue(), newBitSetLeft, depth + 1, (rootNode -> getLeftNode())->isNewByte());
     }
-
-    if((*rootNode.getRightNode()).getRightNode() != nullptr) {
-      getStrings(*rootNode.getRightNode(), bitSets, newBitSetRight, depth + 1);
+    
+    std::cout << rootNode -> getRightNode() -> getRightNode() ;
+    if(rootNode -> getRightNode() -> getRightNode()  != nullptr) {
+      std::cout << "Depth " << depth << " right" << std::endl;
+      getStrings(rootNode -> getRightNode(), bitSets, newBitSetRight, depth + 1);
+      std::cout <<"test4.2" <<std::endl;
     }
     else {
-      bitSets.emplace_back(HuffmanBitString((*rootNode.getRightNode()).getValue(), newBitSetRight, depth + 1, (*rootNode.getRightNode()).isNewByte()));
+      std::cout <<"test3.2" <<std::endl;
+      bitSets.emplace_back((*rootNode -> getRightNode()).getValue(), newBitSetRight, depth + 1, (rootNode -> getRightNode())->isNewByte());
     }
   }
 
 public:
-
   //Returns the root of a Huffman tree made from the frequency table freq.
-  static HuffmanNode getHuffmanTree() {
+  static HuffmanNode* getHuffmanTree() {
     
     unsigned int freqTable[] = {13,23,28,28,28,28,28,28,28,24,30,28,28,30,28,28,28,28,28,28,28,28,
     30,28,28,28,28,28,28,28,28,28, 6,10,10,12,13, 6, 8,11,10,10, 8,11, 8, 6, 6, 6, 5, 5, 5, 6, 6,
@@ -92,38 +104,56 @@ public:
     21,26,27,27,26,27,24,21,21,26,26,28,27,27,27,20,24,20,21,22,21,21,23,22,22,25,25,24,24,26,23,
     26,27,26,26,27,27,27,27,27,28,27,27,27,27,27,26,30};
     
-    std::priority_queue<int, std::vector<HuffmanNode>, Compare> nodes;
+    std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> nodes;
 
     for(unsigned int i = 0; i < 256; i++) {
-      if(freqTable[i] > 0)
-        nodes.emplace(HuffmanNode((char)i, freqTable[i], nullptr, nullptr));
+      //std::cout << "adding:" << std::dec << i << " freq: " << freqTable[i] << std::endl;
+      nodes.emplace(new HuffmanNode((char)i, freqTable[i], nullptr, nullptr, true));
     }
-
-    while(nodes.size() > 1) {
+    
+    std::cout << "size:" << nodes.size() << std::endl;
+    
+    /*
+    for(unsigned int i = 0; i < nodes.size(); i++) {
       HuffmanNode nodeLeft = nodes.top();
+      std::cout << std::dec << i <<" "<< nodeLeft.getFreq() << std::endl;
       nodes.pop();
-      HuffmanNode nodeRight = nodes.top();
+    }*/
+    
+    std::cout << "size:" << nodes.size() << std::endl;
+
+    //HuffmanNode nodeLeft = nullptr, nodeRight = nullptr;
+    while(nodes.size() > 1) {
+      HuffmanNode *nodeLeft = nodes.top() ;
+      std::cout << "poping " << std::dec << nodeLeft -> getFreq() << " "  << std::endl;
+      nodes.pop();
+      HuffmanNode *nodeRight = nodes.top();
+      std::cout << "poping " << std::dec << nodeRight -> getFreq() << " " << std::endl;
       nodes.pop();
 
-      nodes.emplace(HuffmanNode(nodeLeft.getFreq() + nodeRight.getFreq(), &nodeLeft, &nodeRight));
+      nodes.emplace(new HuffmanNode(nodeLeft -> getFreq() + nodeRight -> getFreq(), nodeLeft, nodeRight));
     }
-    HuffmanNode result = nodes.top();
+    HuffmanNode *result = nodes.top();
     nodes.pop();
     return result;
   }
 
   //Returns a list of all Huffman strings from the Huffman tree from rootNode
-  static std::vector<HuffmanBitString> getHuffmanStrings(HuffmanNode rootNode) {
+  static std::vector<HuffmanBitString> getHuffmanStrings(HuffmanNode *rootNode) {
     std::vector<HuffmanBitString> bitSetAll;
-    getStrings(rootNode, bitSetAll, std::bitset<16>(), 0);
+    getStrings(rootNode, bitSetAll, std::vector<bool>(), 0);
 
+    std::cout << "test 5" << std::endl;
+
+    /*
     std::sort(bitSetAll.begin(), bitSetAll.end(), [] (HuffmanBitString o1, HuffmanBitString o2) {
       return o1.length() - o2.length();
-    });
+    });*/
 
     return bitSetAll;
   }
 
+/*
   //Returns the Huffman encoded bytes from inputData.
   static uint8_t* encode(uint8_t inputData[], int length) {
     int maxFreq = 0, max2Freq = 1, freqBits = 0, outIterator = 0, valueOut;
@@ -186,6 +216,8 @@ public:
     for (int i = 0; i < bit_length; i++) {result[i] = outData[i];}
     return result;
   }
+  
+  */
 
   //Returns the decoded bytes from inputData.
   static void decode(char *inputData, unsigned int length, std::vector<char> &outputData) {
@@ -223,15 +255,24 @@ public:
       totalSize += freq[i];
 
     std::cout << "test3" << std::endl;
-    HuffmanNode rootNode = getHuffmanTree();
+    HuffmanNode* rootNode = getHuffmanTree();
     HuffmanNode* currentNode;
-
+    
+    std::vector<HuffmanBitString> strings = getHuffmanStrings(rootNode);
+    
+    for (int i = 0; i < 256; i++) {
+      std::cout << std::dec << (unsigned int)strings[i].getaByte() << '\t';
+      for (auto b: strings[i].getBitSet()) std::cout << b;
+      std::cout << std::endl;
+    }
+    
+    /*
     std::cout << "test4" << std::endl;
     for(int outIterator = 0; outIterator < totalSize; outIterator++) {
       std::cout << "test4.1 " << outIterator << std::endl;
-      currentNode = &rootNode;
+      currentNode = rootNode;
       std::cout << "test4.2 " << outIterator << std::endl;
-      while(currentNode->getLeftNode()) {
+      while(currentNode->getLeftNode() != 0) {
         std::cout << "test4.3 " << std::dec << outIterator << std::endl;
         std::cout << currentNode -> toString();
         if(bitSet[inIterator]) {
@@ -250,6 +291,8 @@ public:
     
     std::cout << "test5" << std::endl;
     std::cout << "test6 "<< std::string(outputData.begin(), outputData.end());
+    */
+    
     //return outputData;
   }
 /*

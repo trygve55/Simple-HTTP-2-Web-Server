@@ -42,6 +42,19 @@ std::string Header::getHTTP2_0() {
   return ss.str();
 }
 
+std::string Header::getBinary(bool huffman) {
+  std::stringstream ss;
+  
+  for(std::map<std::string, std::string>::iterator it = headerlines.begin(); it != headerlines.end(); ++it) {
+    if (it -> first.compare("host") == 0) ss << ':';
+    ss << it -> first << ": " << it -> second << "\r\n";
+  }
+  
+  ss << "\r\n\r\n";
+  
+  return ss.str();
+}
+
 std::map<std::string, std::string> Header::getHeaderlines() {
   return headerlines;
 }

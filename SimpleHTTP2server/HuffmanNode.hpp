@@ -1,29 +1,35 @@
 #include <stdint.h>
 #include <string>
 #include <sstream>
+#include <iostream>
 
 class HuffmanNode {
 private:
   bool bit, newByte = false;
   char value;
-  unsigned int freq;
-  HuffmanNode *leftNode, *rightNode;
+  int freq;
+  HuffmanNode *leftNode = nullptr, *rightNode = nullptr;
 
 public:
   //HuffmanNode() {}
   
-  HuffmanNode(char value, unsigned int freq, HuffmanNode* leftNode, HuffmanNode* rightNode) : value(value), freq(freq) {
-    this->leftNode = leftNode;
-    this->rightNode = rightNode;
-  }
-
-  HuffmanNode(unsigned int freq, HuffmanNode* leftNode, HuffmanNode* rightNode) {
+  HuffmanNode(char value, int freq, HuffmanNode* leftNode, HuffmanNode* rightNode) {
+    std::cout << "left: " << leftNode << " right: " << rightNode << std::endl;
+    this->value = value;
     this->freq = freq;
     this->leftNode = leftNode;
     this->rightNode = rightNode;
   }
 
-  HuffmanNode(char value, unsigned int freq, HuffmanNode* leftNode, HuffmanNode* rightNode, bool newByte) {
+  HuffmanNode(int freq, HuffmanNode* leftNode, HuffmanNode* rightNode) {
+    std::cout << "left: " << leftNode << " right: " << rightNode << std::endl;
+    this->freq = freq;
+    this->leftNode = leftNode;
+    this->rightNode = rightNode;
+  }
+
+  HuffmanNode(char value, int freq, HuffmanNode* leftNode, HuffmanNode* rightNode, bool newByte) {
+    std::cout << "left: " << leftNode << " right: " << rightNode << std::endl;
     this->value = value;
     this->freq = freq;
     this->leftNode = leftNode;
@@ -33,7 +39,10 @@ public:
 
   char getValue() { return value; }
 
-  unsigned int getFreq() { return freq; }
+  int getFreq() {
+    //std::cout << " freq  " << freq << std::endl;
+    return freq;
+  }
 
   HuffmanNode* getLeftNode() { return leftNode; }
 

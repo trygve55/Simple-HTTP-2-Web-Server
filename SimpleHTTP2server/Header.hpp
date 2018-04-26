@@ -18,6 +18,7 @@ public:
   std::string getHeaderline(std::string headerline);
   std::string getHTTP();
   std::string getHTTP2_0();
+  std::string getBinary(bool huffman);
   std::map<std::string, std::string> getHeaderlines();
 };
 
