@@ -29,6 +29,7 @@ HTTP2Connection::HTTP2Connection(int socket, char *buffer, WebBinder *webBinder)
     char payload[payloadSize];
     payloadSize = settings.buildPayload(payload);
     settingsFrame.setPayload(payload, payloadSize);
+    settingsFrame.setStreamIdentifier(0);
     sendFrame(settingsFrame);
     //Sending setting frame end
 
@@ -211,15 +212,32 @@ void HTTP2Connection::proccessHeaderFrame(HTTP2Frame frame) {
     
     std::cout << std::endl << std::endl << "Decoded HTTP2 frame:" << std::endl << header.getHTTP2_0();
     
+    //Sending header frame start
+    HTTP2Frame headerFrame;
+    
+    headerFrame.setType(HTTP2Frame::FrameIDs.HEADERS);
+    headerFrame.setFlags(0x04);
+    headerFrame.setStreamIdentifier(5);
+    
+    Header sendHeader;
+    sendHeader.setHeaderline(":status", "200");
+    sendHeader.setHeaderline("cache-control", "private");
+    sendHeader.setHeaderline("location", "http://localhost:8080/index2.html");
+    
+    headerFrame.setPayload(sendHeader.getBinary(0).data(), sendHeader.getBinary(0).size());
+    
+    sendFrame(headerFrame);
+    //Sending header frame end
+    
     //Sending data frame start
     HTTP2Frame dataFrame;
     
-    dataFrame.setType(0);
-    dataFrame.setFlags(0x01);
+    dataFrame.setType(HTTP2Frame::FrameIDs.DATA);
+    dataFrame.setFlags(0x04);
     dataFrame.setStreamIdentifier(streamDependency);
     std::string payload("Test");
     dataFrame.setPayload(payload.c_str(), 4);
-    sendFrame(dataFrame);
+    //sendFrame(dataFrame);
     //Sending data frame end
 }
 
@@ -274,6 +292,7 @@ void HTTP2Connection::connectionError(unsigned int lastOKID, unsigned int errorC
 
 ssize_t HTTP2Connection::sendFrame(HTTP2Frame frame) {
     frame.getFrame(sendBuffer);
+    std::cout<< std::hex << (int)sendBuffer[0] << " " << (int)sendBuffer[1] << " " << (int)sendBuffer[2] << " " << (int)sendBuffer[3] << " " << (int)sendBuffer[4]<< std::endl;
     std::cout << "Sending frame: " << frame.debugFrame(sendBuffer) << " Size: " << std::dec << frame.getSize() << std::endl;
     return write(socket, sendBuffer, frame.getSize());
 }

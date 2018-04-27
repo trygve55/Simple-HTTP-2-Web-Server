@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <sstream>
+#include <vector>
 
 //using namespace std;
 
@@ -18,7 +19,7 @@ public:
   std::string getHeaderline(std::string headerline);
   std::string getHTTP();
   std::string getHTTP2_0();
-  std::string getBinary(bool huffman);
+  std::vector<char> getBinary(bool huffman);
   std::map<std::string, std::string> getHeaderlines();
 };
 
