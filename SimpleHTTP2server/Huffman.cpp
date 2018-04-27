@@ -16,6 +16,7 @@ HuffmanNode* Huffman::genRootNode() {
       if (j == huffmanCodeLength[i] - 1) {
         if (huffmanCodes[i] >> (huffmanCodeLength[i] - j + 1) & 0x1) currentNode -> leftNode = new HuffmanNode(i);
         else currentNode -> rightNode = new HuffmanNode(i);
+        break;
       } else if (huffmanCodes[i] >> (huffmanCodeLength[i] - j - 1) & 0x1) {
         if (currentNode -> leftNode == nullptr) currentNode -> leftNode = new HuffmanNode();
         currentNode = currentNode -> leftNode;
@@ -113,94 +114,31 @@ void Huffman::decode(char *inputData, unsigned int length, std::vector<char> &ou
   HuffmanNode* currentNode = rootNode;
   std::cout << "test3 " << currentNode << std::endl;
   
-  while(currentNode->getLeftNode() != nullptr && inIteratorBit < bitSet.size()) {
-    std::cout << "t " << bitSet[inIteratorBit] << std::endl;
-    std::cout << "test5 " << currentNode << std::endl;
+  while(inIteratorBit < bitSet.size()) {
     std::cout << bitSet[inIteratorBit];// ((bitSet[inIteratorByte] >> (7 - inIteratorBit)) & 0x1);
-    std::cout << "test6 " << std::endl;
-    //std::cout << currentNode -> toString();
     if(bitSet[inIteratorBit]) { //bitSet[inIteratorByte] >> (8 - inIteratorBit)) & 0x1) {
-      //std::cout << "test4.4.1 " << std::hex << (currentNode->getLeftNode()) << std::endl;
-      std::cout << "test8 " << std::endl;
       if (currentNode->getLeftNode()) currentNode = currentNode->getLeftNode();
-      else {
-        std::cout << "test9 " << std::endl;
-        inIteratorBit++;
-        std::cout << bitSet[inIteratorBit];
-        std::cout << "\t test4.5 "<< std::dec << outputData.size() << " " << (unsigned int)currentNode->getValue() << std::endl;
+      
+      if (currentNode->getLeftNode() == nullptr) {
+        std::cout << std::endl << "2 char " << std::dec << (unsigned int)currentNode->getValue() << std::endl; //<< std::dec << outputData.size() << " " << (unsigned int)currentNode->getValue() << std::endl;
         outputData.emplace_back(currentNode->getValue());
-        std::cout << "test3 " << currentNode << std::endl;
         currentNode = rootNode;
-        
-        std::cout << "test4 " << currentNode << std::endl;
       }
     }
     else {
-      //std::cout << "test4.4.2 "<< std::hex << (currentNode->getLeftNode())  << std::endl;
-      currentNode = currentNode->getRightNode();
-      std::cout << "test7 " << std::endl;
       if (currentNode->getRightNode()) currentNode = currentNode->getRightNode();
-      else {
-        std::cout << "test10 " << std::endl;
-        inIteratorBit++;
-        std::cout << bitSet[inIteratorBit];
-        std::cout << "\t test4.5 "<< std::dec << outputData.size() << " " << (unsigned int)currentNode->getValue() << std::endl;
+      
+      if (currentNode->getRightNode() == nullptr) {
+        std::cout << std::endl << "1 char " << std::dec << (unsigned int)currentNode->getValue() << std::endl; // std::dec << outputData.size() << " " << (unsigned int)currentNode->getValue() << std::endl;
         outputData.emplace_back(currentNode->getValue());
-        std::cout << "test3 " << currentNode << std::endl;
         currentNode = rootNode;
-        
-        std::cout << "test4 " << currentNode << std::endl;
       }
     }
-    
-    /*
-    std::cout << "test8 " << currentNode << std::endl;
-    if (currentNode->getLeftNode() == nullptr) {
-      std::cout << "test9 " << std::endl;
-      inIteratorBit++;
-      std::cout << bitSet[inIteratorBit];
-      std::cout << "\t test4.5 "<< std::dec << outputData.size() << " " << (unsigned int)currentNode->getValue() << std::endl;
-      outputData.emplace_back(currentNode->getValue());
-      std::cout << "test3 " << currentNode << std::endl;
-      currentNode = rootNode;
-      
-      std::cout << "test4 " << currentNode << std::endl;
-    }
-    */
     
     inIteratorBit++;
   }
   
-  
-  /*
-  std::cout << "test4" << std::endl;
-  for(unsigned int inIteratorByte = 0; inIteratorByte < length; inIteratorByte++) {
-
-    currentNode = rootNode;
-  
-    while(currentNode->getLeftNode() != nullptr) {
-      std::cout << bitSet[inIteratorByte*8 + inIteratorBit];// ((bitSet[inIteratorByte] >> (7 - inIteratorBit)) & 0x1);
-      //std::cout << currentNode -> toString();
-      if(bitSet[inIteratorByte*8 + inIteratorBit]) { //bitSet[inIteratorByte] >> (8 - inIteratorBit)) & 0x1) {
-        //std::cout << "test4.4.1 " << std::hex << (currentNode->getLeftNode()) << std::endl;
-        currentNode = currentNode->getLeftNode();
-      }
-      else {
-        //std::cout << "test4.4.2 "<< std::hex << (currentNode->getLeftNode())  << std::endl;
-        currentNode = currentNode->getRightNode();
-      }
-      inIteratorBit++;
-      if (inIteratorBit == 8) inIteratorBit = 0;
-    }
-    
-    std::cout << "\t test4.5 "<< std::dec << outputData.size() << " " << (unsigned int)currentNode->getValue() << std::endl;
-    outputData.emplace_back(currentNode->getValue());
-  }
-  */
-  
   std::cout << "test6 "<< std::string(outputData.begin(), outputData.end());
-  
-  //return outputData;
 }
 
 const uint32_t Huffman::huffmanCodes[256] = {
