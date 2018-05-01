@@ -15,7 +15,10 @@ int read_htmlfile(stringstream &bodyStream,string filePath) {
   f.seekg(0, ios::beg);
   {
     string line;
-    while (getline(f ,line)) {bodyStream << line << "\r\n";}
+    while (getline(f ,line)) {
+      bodyStream << line << "\r\n";
+      fSize++;
+    }
   }
   f.close();
   return fSize;
