@@ -234,10 +234,10 @@ void HTTP2Connection::proccessHeaderFrame(HTTP2Frame frame) {
     
     dataFrame.setType(HTTP2Frame::FrameIDs.DATA);
     dataFrame.setFlags(0x04);
-    dataFrame.setStreamIdentifier(streamDependency);
+    dataFrame.setStreamIdentifier(5);
     std::string payload("Test");
     dataFrame.setPayload(payload.c_str(), 4);
-    //sendFrame(dataFrame);
+    sendFrame(dataFrame);
     //Sending data frame end
 }
 

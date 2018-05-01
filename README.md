@@ -40,6 +40,11 @@ Compiling:
   $ make
   $ ./webserver
 
+POSIX standard library:
+  <netinet/in.h>
+  <unistd.h>
+  <stdint.h>
+
 Usage of C++ Standard Library:
   Containers:
     <array>
@@ -53,13 +58,14 @@ Usage of C++ Standard Library:
   Strings:
     <string>
     <regex>
+    
   Streams and input/output:
     <fstream>
     <iostream>
     <sstream>
     
   Language support:
-    <exception>
+    <stdexcept>
     <new>
     
   Thread support library:

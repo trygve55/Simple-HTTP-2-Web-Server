@@ -26,6 +26,22 @@ HuffmanNode* Huffman::genRootNode() {
       }
     }
   }
+  
+  /*
+  currentNode = rootNode;
+  std::cout << currentNode -> leftNode << " " << currentNode -> rightNode << " " << (int)currentNode -> getValue() << std::endl;
+  currentNode = currentNode -> rightNode;
+  std::cout << currentNode -> leftNode << " " << currentNode -> rightNode << " " << (int)currentNode -> getValue() << std::endl;
+  currentNode = currentNode -> rightNode;
+  std::cout << currentNode -> leftNode << " " << currentNode -> rightNode << " " << (int)currentNode -> getValue() << std::endl;
+  currentNode = currentNode -> leftNode;
+  std::cout << currentNode -> leftNode << " " << currentNode -> rightNode << " " << (int)currentNode -> getValue() << std::endl;
+  currentNode = currentNode -> rightNode;
+  std::cout << currentNode -> leftNode << " " << currentNode -> rightNode << " " << (int)currentNode -> getValue() << std::endl;
+  currentNode = currentNode -> rightNode;
+  std::cout << currentNode -> leftNode << " " << currentNode -> rightNode << " " << (int)currentNode -> getValue() << std::endl;
+  */
+  
   return Huffman::rootNode;
 }
 
