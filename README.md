@@ -3,7 +3,7 @@
 This is a simple HTTP2.0(h2c) web server library for Linux.
 This library uses only the c++ standard template library and some C functions.
 
-###Included features:
+### Included features:
 
  - HTTP1.1 to HTTP2 upgrade.
  - HTTP2 Settings sent and received by clients and server upon connection.
@@ -13,29 +13,29 @@ This library uses only the c++ standard template library and some C functions.
  - Error handling of streams and connections.
  - Partial header decoding.
 
-###Useful methods:
+### Useful methods:
   - ServerLib(int port); - Create a server object with specified port number.
   - int startServer(); - Binds the socket and starts the server.
   - int webBind(std::string webDir, std::string diskDir); - Binds a path on the web server to a directory on the disk. 
   - int webUnbind(std::string webDir); - Unbinds a path on the web server
 
-###Current limitations:
+### Current limitations:
 
   - No support for TLS yet.
   - No support for UDP communication.
   - Huffman encoding is incomplete.
   - Binding of a function to a web path.
   
-###Example:
+### Example:
 
 The file `webserver.cpp` is an example of how to use this libary.
 
-###Testing:
+### Testing:
 
   Test the server with nghttp or similar programs. There is a shellscript (./serverTesting/get.sh) to run a
   HTTP2 get request to the server. You can test the HTTP1.1 portion of the server with curl or a web browser.
 
-###Compiling and running:
+### Compiling and running:
 
   ```
 git clone https://github.com/trygve55/Simple-HTTP-2-Web-Server`
@@ -47,13 +47,13 @@ make
 ./webserver
 ```
 
-###Libary usage:
-####POSIX standard library:
+### Libary usage:
+#### POSIX standard library:
  - netinet/in.h
  - unistd.h
  - stdint.h
 
-####C++ Standard Library:
+#### C++ Standard Library:
   - Containers:
     - bitset
     - map
@@ -72,7 +72,7 @@ make
   - Thread support library:
     - thread(pthread)
     
-###Documentation used:
+### Documentation used:
   HTTP2 Specification:
     Hypertext Transfer Protocol Version 2 (HTTP/2) - https://http2.github.io/http2-spec/
     HPACK: Header Compression for HTTP/2 - https://http2.github.io/http2-spec/compression.html
